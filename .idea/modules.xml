@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/online.iml" filepath="$PROJECT_DIR$/online.iml" />
+      <module fileurl="file://$PROJECT_DIR$/online-tools/online-tools.iml" filepath="$PROJECT_DIR$/online-tools/online-tools.iml" />
+      <module fileurl="file://$PROJECT_DIR$/online-web/online-web.iml" filepath="$PROJECT_DIR$/online-web/online-web.iml" />
+    </modules>
+  </component>
+</project>
