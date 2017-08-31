@@ -15,6 +15,7 @@
     <modules>
         <module>online-tools</module>
         <module>online-web</module>
+        <module>mybatis-generator</module>
     </modules>
 
 

@@ -6,11 +6,13 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="mybatis-generator" />
         <module name="online-tools" />
         <module name="online-web" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="mybatis-generator" target="1.7" />
       <module name="online" target="1.7" />
       <module name="online-tools" target="1.7" />
       <module name="online-web" target="1.7" />
