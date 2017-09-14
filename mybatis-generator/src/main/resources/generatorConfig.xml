@@ -38,7 +38,17 @@
         </javaClientGenerator>
 
         <!--对应数据库表名 -->
-        <table tableName="activity" enableCountByExample="false"
+        <table tableName="line_user" enableCountByExample="false"
+               enableUpdateByExample="false" enableDeleteByExample="false"
+               enableSelectByExample="false" selectByExampleQueryId="false">
+
+        </table>
+        <table tableName="user_plan" enableCountByExample="false"
+               enableUpdateByExample="false" enableDeleteByExample="false"
+               enableSelectByExample="false" selectByExampleQueryId="false">
+
+        </table>
+        <table tableName="foot_site" enableCountByExample="false"
                enableUpdateByExample="false" enableDeleteByExample="false"
                enableSelectByExample="false" selectByExampleQueryId="false">
 

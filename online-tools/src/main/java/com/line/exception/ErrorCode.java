@@ -2,7 +2,11 @@ package com.line.exception;
 
 public enum  ErrorCode
 {
-    LOGIN_ERRPWD(100001,"登录密码错误");
+    //1开头程序性错误
+    DB_ERR(100001,"数据库操作异常"),
+
+    //2业务错误
+    LOGIN_ERR(200001,"请重新登录");
 
 
     private int    errorCode;
