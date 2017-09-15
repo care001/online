@@ -1,13 +1,15 @@
 package com.line.onlineweb.service;
 
 import com.line.onlineweb.service.dto.FootShowDTO;
+import com.line.onlineweb.service.dto.Page;
+import com.line.onlineweb.service.param.FootShowParam;
 
 import java.util.List;
 import java.util.Map;
 
 public interface FootShowService {
 
-    List<FootShowDTO> findAllNextFoot();
+    Page<FootShowDTO> findAllNextFoot(Page<FootShowDTO> page);
     /**
      * 根据条件查询
      * map:
@@ -16,5 +18,5 @@ public interface FootShowService {
      * userId
      * siteId
      * hot*/
-    List<FootShowDTO> findBySeachMap(Map<String, Object> map);
+    Page<FootShowDTO> findBySeachMap(FootShowParam param, Page<FootShowDTO> foots);
 }

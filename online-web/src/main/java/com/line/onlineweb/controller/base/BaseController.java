@@ -1,4 +1,4 @@
-package com.line.onlineweb.controller;
+package com.line.onlineweb.controller.base;
 
 import com.line.exception.ErrorCode;
 import com.line.exception.ErrorCodeException;

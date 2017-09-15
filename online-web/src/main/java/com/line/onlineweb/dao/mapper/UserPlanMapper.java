@@ -2,6 +2,7 @@ package com.line.onlineweb.dao.mapper;
 
 import com.line.onlineweb.dao.entity.UserPlan;
 import com.line.onlineweb.service.dto.FootShowDTO;
+import com.line.onlineweb.service.param.FootShowParam;
 
 import java.util.List;
 import java.util.Map;
@@ -55,5 +56,5 @@ public interface UserPlanMapper {
      */
     int updateByPrimaryKey(UserPlan record);
 
-    List<FootShowDTO> findBySeachMap(Map<String, Object> map);
+    List<Map<String, Object>> findBySeachMap(FootShowParam param);
 }

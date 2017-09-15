@@ -4,6 +4,7 @@ public enum  ErrorCode
 {
     //1开头程序性错误
     DB_ERR(100001,"数据库操作异常"),
+    REFLEX_ERR(100001,"反射处理异常"),
 
     //2业务错误
     LOGIN_ERR(200001,"请重新登录");

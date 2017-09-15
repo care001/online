@@ -1,6 +1,7 @@
 package com.line.onlineweb.controller;
 
 import com.line.onlineweb.bean.JsonResult;
+import com.line.onlineweb.controller.base.BaseController;
 import com.line.onlineweb.dao.entity.LineUser;
 import com.line.onlineweb.service.UserService;
 import com.line.utils.MD5Tools;
@@ -14,7 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 
 @Controller
 @RequestMapping(value="/user")
-public class UserController extends BaseController{
+public class UserController extends BaseController {
 
     @Autowired
     private UserService userService;

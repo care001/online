@@ -2,9 +2,95 @@ package com.line.onlineweb.service.dto;
 
 import com.line.onlineweb.dao.entity.UserPlan;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class FootShowDTO extends UserPlan{
+public class FootShowDTO implements Serializable{
+
+
+    private Long id;
+
+    private Long userId;
+
+    private Long siteId;
+
+    private String sayInfo;
+
+    private String footResult;
+
+    private Long hot;
+
+    private Long click;
+
+    private Date createTime;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
+    public Long getSiteId() {
+        return siteId;
+    }
+
+    public void setSiteId(Long siteId) {
+        this.siteId = siteId;
+    }
+
+    public String getSayInfo() {
+        return sayInfo;
+    }
+
+    public void setSayInfo(String sayInfo) {
+        this.sayInfo = sayInfo == null ? null : sayInfo.trim();
+    }
+
+    public String getFootResult() {
+        return footResult;
+    }
+
+    public void setFootResult(String footResult) {
+        this.footResult = footResult == null ? null : footResult.trim();
+    }
+
+    public Long getHot() {
+        return hot;
+    }
+
+    public void setHot(Long hot) {
+        this.hot = hot;
+    }
+
+    public Long getClick() {
+        return click;
+    }
+
+    public void setClick(Long click) {
+        this.click = click;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+
+
+
     private String loginName;
 
     private String showName;
