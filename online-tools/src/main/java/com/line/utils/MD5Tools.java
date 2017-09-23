@@ -46,5 +46,10 @@ public abstract class MD5Tools
         } catch (Exception e) {
             return null;
         }
+
+    }
+
+    public static void main(String[] args) {
+        System.out.println(MD5("123456"));
     }
 }

@@ -75,6 +75,9 @@ public class BeanUtils<T> {
         if(o instanceof BigInteger){
             o = ((BigInteger) o).longValue();
         }
+        if(o instanceof BigDecimal){
+            o = ((BigDecimal) o).longValue();
+        }
         return o;
     }
 

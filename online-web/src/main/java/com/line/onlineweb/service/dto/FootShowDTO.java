@@ -123,17 +123,17 @@ public class FootShowDTO implements Serializable{
     }
 
 
-    private Long name;
+    private String name;
 
     private String startTime;
 
     private String matchName;
 
-    public Long getName() {
+    public String getName() {
         return name;
     }
 
-    public void setName(Long name) {
+    public void setName(String name) {
         this.name = name;
     }
 
@@ -151,5 +151,16 @@ public class FootShowDTO implements Serializable{
 
     public void setMatchName(String matchName) {
         this.matchName = matchName == null ? null : matchName.trim();
+    }
+
+
+    private Long support;
+
+    public Long getSupport() {
+        return support;
+    }
+
+    public void setSupport(Long support) {
+        this.support = support;
     }
 }

@@ -1,6 +1,7 @@
 package com.line.onlineweb.service.impl;
 
 import com.github.pagehelper.PageHelper;
+import com.line.onlineweb.dao.entity.UserPlan;
 import com.line.onlineweb.dao.mapper.UserPlanMapper;
 import com.line.onlineweb.service.FootShowService;
 import com.line.onlineweb.service.dto.FootShowDTO;
@@ -22,10 +23,8 @@ public class FootShowServiceImpl implements FootShowService{
     private UserPlanMapper userPlanMapper;
 
     @Override
-    public Page<FootShowDTO> findAllNextFoot(Page<FootShowDTO> page) {
-        FootShowParam param = new FootShowParam();
+    public Page<FootShowDTO> findAllNextFoot(Page<FootShowDTO> page, FootShowParam param) {
         param.setStartTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
-        page.setPageNo(2);
         page = findBySeachMap(param, page);
         return page;
     }
@@ -37,6 +36,11 @@ public class FootShowServiceImpl implements FootShowService{
         BeanUtils<FootShowDTO> beanUtils = new BeanUtils<FootShowDTO>();
         footPage.setResults(beanUtils.ListMap2JavaBean(foots, FootShowDTO.class));
         return footPage;
+    }
+
+    @Override
+    public UserPlan findUserPlanById(Long id) {
+        return userPlanMapper.selectByPrimaryKey(id);
     }
 
 }

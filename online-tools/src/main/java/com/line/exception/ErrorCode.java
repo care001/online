@@ -7,7 +7,7 @@ public enum  ErrorCode
     REFLEX_ERR(100001,"反射处理异常"),
 
     //2业务错误
-    LOGIN_ERR(200001,"请重新登录");
+    LOGIN_ERR(200001,"您还没有登录");
 
 
     private int    errorCode;

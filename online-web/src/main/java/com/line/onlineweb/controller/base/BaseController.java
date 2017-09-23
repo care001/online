@@ -32,4 +32,18 @@ public abstract class BaseController {
         user.setNowIp(request.getRemoteAddr());
         return user;
     }
+    /**
+     * 获取当前登录用户ID(未登录为-1)
+     * @param request
+     * @return
+     */
+    protected Long getUserId(HttpServletRequest request){
+        LineUser user = (LineUser) request.getSession().getAttribute("user");
+        if(user == null){
+            return -1L;
+        }
+        user.setNowIp(request.getRemoteAddr());
+        return user.getId();
+    }
+
 }
