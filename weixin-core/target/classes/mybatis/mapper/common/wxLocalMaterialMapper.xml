@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.com.weixin.common.dao.WxLocalMaterialDao">
+	<resultMap id="queryResultMap" type="cn.com.weixin.common.entity.WxLocalMaterial">
+		<result column="lm_id" property="lmId" jdbcType="INTEGER"/>
+		<!-- 名称 -->
+		<result column="name" property="name" jdbcType="VARCHAR"/>
+		<!-- 微信图片url -->
+		<result column="weixin_img_url" property="weixinImgUrl" jdbcType="VARCHAR"/>
+		<!-- 本地图片url -->
+		<result column="loc_img_url" property="locImgUrl" jdbcType="VARCHAR"/>
+		<!-- 图片保存路径 -->
+		<result column="img_path" property="imgPath" jdbcType="VARCHAR"/>
+		<!-- 视频保存路径 -->
+		<result column="video_path" property="videoPath" jdbcType="VARCHAR"/>
+		<!-- 音频保存路径 -->
+		<result column="music_path" property="musicPath" jdbcType="VARCHAR"/>
+		<!-- 微信返回的媒体标识符 -->
+		<result column="media_id" property="mediaId" jdbcType="VARCHAR"/>
+		<!-- 第一篇文章标题 -->
+		<result column="title" property="title" jdbcType="VARCHAR"/>
+		<!-- 第一篇文章图片缩略图 -->
+		<result column="thumb_url" property="thumbUrl" jdbcType="VARCHAR"/>
+		<!-- 第一篇文章摘要 -->
+		<result column="digest" property="digest" jdbcType="VARCHAR"/>
+		<!-- 媒体类型,1:图片,2:声音,3:视频,4:图文 -->
+		<result column="type" property="type" jdbcType="TINYINT"/>
+		<!-- 排序字段 -->
+		<result column="sort" property="sort" jdbcType="INTEGER"/>
+		<!-- 是否共享 -->
+		<result column="is_share" property="isShare" jdbcType="BOOLEAN"/>
+		<!-- wx_weixin_account表主键 -->
+		<result column="wa_id" property="waId" jdbcType="INTEGER"/>
+		<result column="add_time" property="addTime" jdbcType="TIMESTAMP"/>
+	</resultMap>
+	<!-- 聚合查询 -->
+	<select id="findProjection" parameterType="cn.com.goldfinance.jcframework.expression.projection.ProjectionQuery" resultType="java.util.HashMap">SELECT 
+		<include refid="expressionBlock.projectionColumn"/> FROM wx_local_material t 
+		<include refid="expressionBlock.where"/>  
+		<include refid="expressionBlock.groupBy"/>  
+		<include refid="expressionBlock.having"/>  
+		<if test="orderable">ORDER BY ${order}</if> 
+	</select>
+	<!-- 根据条件查询记录 -->
+	<select id="find" parameterType="cn.com.goldfinance.jcframework.expression.ExpressionQuery" resultMap="queryResultMap">SELECT 
+		<choose>
+			<when test="columns.size&gt;0"> 
+				<foreach collection="columns" item="column" separator=",">${column}</foreach> 
+			</when>
+			<otherwise>t.lm_id , t.name , t.weixin_img_url , t.loc_img_url , t.img_path , t.video_path , t.music_path , t.media_id , t.title , t.thumb_url , t.digest , t.type , t.sort , t.is_share , t.wa_id , t.add_time</otherwise>
+		</choose> FROM wx_local_material t
+		<include refid="expressionBlock.where"/>  
+		<choose>
+			<when test="orderable">ORDER BY ${order}</when>
+			<otherwise>ORDER BY t.lm_id desc</otherwise>
+		</choose>  
+		<if test="!isQueryAll">LIMIT #{start,jdbcType=INTEGER},#{limit,jdbcType=INTEGER}</if> 
+	</select>
+	<!-- 根据条件查询记录数 -->
+	<select id="findTotalCount" parameterType="cn.com.goldfinance.jcframework.expression.ExpressionQuery" resultType="java.lang.Integer">SELECT count(*) FROM wx_local_material t 
+		<include refid="expressionBlock.where"/> 
+	</select>
+	<!-- 根据主键获取单条记录 -->
+	<select id="get" resultMap="queryResultMap" parameterType="cn.com.weixin.common.entity.WxLocalMaterial">SELECT t.lm_id , t.name , t.weixin_img_url , t.loc_img_url , t.img_path , t.video_path , t.music_path , t.media_id , t.title , t.thumb_url , t.digest , t.type , t.sort , t.is_share , t.wa_id , t.add_time FROM wx_local_material t WHERE lm_id = #{lmId,jdbcType=INTEGER} LIMIT 1</select>
+	<!-- 根据条件获取单条记录 -->
+	<select id="getByExpression" resultMap="queryResultMap" parameterType="cn.com.goldfinance.jcframework.expression.ExpressionQuery">SELECT t.lm_id , t.name , t.weixin_img_url , t.loc_img_url , t.img_path , t.video_path , t.music_path , t.media_id , t.title , t.thumb_url , t.digest , t.type , t.sort , t.is_share , t.wa_id , t.add_time FROM wx_local_material t
+		<include refid="expressionBlock.where"/> LIMIT 1
+	</select>
+	<!-- 保存,保存全部字段 -->
+	<insert id="save" parameterType="cn.com.weixin.common.entity.WxLocalMaterial" keyProperty="lmId" keyColumn="lm_id" useGeneratedKeys="true">INSERT INTO wx_local_material ( `name` , `weixin_img_url` , `loc_img_url` , `img_path` , `video_path` , `music_path` , `media_id` , `title` , `thumb_url` , `digest` , `type` , `sort` , `is_share` , `wa_id` , `add_time` ) VALUES ( #{name,jdbcType=VARCHAR} , #{weixinImgUrl,jdbcType=VARCHAR} , #{locImgUrl,jdbcType=VARCHAR} , #{imgPath,jdbcType=VARCHAR} , #{videoPath,jdbcType=VARCHAR} , #{musicPath,jdbcType=VARCHAR} , #{mediaId,jdbcType=VARCHAR} , #{title,jdbcType=VARCHAR} , #{thumbUrl,jdbcType=VARCHAR} , #{digest,jdbcType=VARCHAR} , #{type,jdbcType=TINYINT} , #{sort,jdbcType=INTEGER} , #{isShare,jdbcType=BOOLEAN} , #{waId,jdbcType=INTEGER} , #{addTime,jdbcType=TIMESTAMP} )</insert>
+	<!-- 保存,保存不为NULL的字段 -->
+	<insert id="saveNotNull" parameterType="cn.com.weixin.common.entity.WxLocalMaterial" keyProperty="lmId" keyColumn="lm_id" useGeneratedKeys="true">INSERT INTO wx_local_material
+		<trim prefix="(" suffix=")" suffixOverrides=","> 
+			<if test="name != null">`name`,</if>  
+			<if test="weixinImgUrl != null">`weixin_img_url`,</if>  
+			<if test="locImgUrl != null">`loc_img_url`,</if>  
+			<if test="imgPath != null">`img_path`,</if>  
+			<if test="videoPath != null">`video_path`,</if>  
+			<if test="musicPath != null">`music_path`,</if>  
+			<if test="mediaId != null">`media_id`,</if>  
+			<if test="title != null">`title`,</if>  
+			<if test="thumbUrl != null">`thumb_url`,</if>  
+			<if test="digest != null">`digest`,</if>  
+			<if test="type != null">`type`,</if>  
+			<if test="sort != null">`sort`,</if>  
+			<if test="isShare != null">`is_share`,</if>  
+			<if test="waId != null">`wa_id`,</if>  
+			<if test="addTime != null">`add_time`,</if> 
+		</trim>  
+		<trim prefix="values (" suffix=")" suffixOverrides=","> 
+			<if test="name != null">#{name,jdbcType=VARCHAR},</if>  
+			<if test="weixinImgUrl != null">#{weixinImgUrl,jdbcType=VARCHAR},</if>  
+			<if test="locImgUrl != null">#{locImgUrl,jdbcType=VARCHAR},</if>  
+			<if test="imgPath != null">#{imgPath,jdbcType=VARCHAR},</if>  
+			<if test="videoPath != null">#{videoPath,jdbcType=VARCHAR},</if>  
+			<if test="musicPath != null">#{musicPath,jdbcType=VARCHAR},</if>  
+			<if test="mediaId != null">#{mediaId,jdbcType=VARCHAR},</if>  
+			<if test="title != null">#{title,jdbcType=VARCHAR},</if>  
+			<if test="thumbUrl != null">#{thumbUrl,jdbcType=VARCHAR},</if>  
+			<if test="digest != null">#{digest,jdbcType=VARCHAR},</if>  
+			<if test="type != null">#{type,jdbcType=TINYINT},</if>  
+			<if test="sort != null">#{sort,jdbcType=INTEGER},</if>  
+			<if test="isShare != null">#{isShare,jdbcType=BOOLEAN},</if>  
+			<if test="waId != null">#{waId,jdbcType=INTEGER},</if>  
+			<if test="addTime != null">#{addTime,jdbcType=TIMESTAMP},</if> 
+		</trim> 
+	</insert>
+	<!-- 更新,更新全部字段 -->
+	<update id="update" parameterType="cn.com.weixin.common.entity.WxLocalMaterial">UPDATE wx_local_material
+		<set>name=#{name,jdbcType=VARCHAR}, weixin_img_url=#{weixinImgUrl,jdbcType=VARCHAR}, loc_img_url=#{locImgUrl,jdbcType=VARCHAR}, img_path=#{imgPath,jdbcType=VARCHAR}, video_path=#{videoPath,jdbcType=VARCHAR}, music_path=#{musicPath,jdbcType=VARCHAR}, media_id=#{mediaId,jdbcType=VARCHAR}, title=#{title,jdbcType=VARCHAR}, thumb_url=#{thumbUrl,jdbcType=VARCHAR}, digest=#{digest,jdbcType=VARCHAR}, type=#{type,jdbcType=TINYINT}, sort=#{sort,jdbcType=INTEGER}, is_share=#{isShare,jdbcType=BOOLEAN}, wa_id=#{waId,jdbcType=INTEGER}, add_time=#{addTime,jdbcType=TIMESTAMP},</set> WHERE lm_id = #{lmId,jdbcType=INTEGER}
+	</update>
+	<!-- 根据指定条件更新 -->
+	<update id="updateByExpression">UPDATE wx_local_material 
+		<set>name=#{entity.name,jdbcType=VARCHAR}, weixin_img_url=#{entity.weixinImgUrl,jdbcType=VARCHAR}, loc_img_url=#{entity.locImgUrl,jdbcType=VARCHAR}, img_path=#{entity.imgPath,jdbcType=VARCHAR}, video_path=#{entity.videoPath,jdbcType=VARCHAR}, music_path=#{entity.musicPath,jdbcType=VARCHAR}, media_id=#{entity.mediaId,jdbcType=VARCHAR}, title=#{entity.title,jdbcType=VARCHAR}, thumb_url=#{entity.thumbUrl,jdbcType=VARCHAR}, digest=#{entity.digest,jdbcType=VARCHAR}, type=#{entity.type,jdbcType=TINYINT}, sort=#{entity.sort,jdbcType=INTEGER}, is_share=#{entity.isShare,jdbcType=BOOLEAN}, wa_id=#{entity.waId,jdbcType=INTEGER}, add_time=#{entity.addTime,jdbcType=TIMESTAMP},</set>  
+		<include refid="expressionBlock.updateWhere"/> 
+	</update>
+	<!-- 更新不为NULL的字段 -->
+	<update id="updateNotNull" parameterType="cn.com.weixin.common.entity.WxLocalMaterial">UPDATE wx_local_material
+		<set> 
+			<if test="name != null">name=#{name,jdbcType=VARCHAR},</if>  
+			<if test="weixinImgUrl != null">weixin_img_url=#{weixinImgUrl,jdbcType=VARCHAR},</if>  
+			<if test="locImgUrl != null">loc_img_url=#{locImgUrl,jdbcType=VARCHAR},</if>  
+			<if test="imgPath != null">img_path=#{imgPath,jdbcType=VARCHAR},</if>  
+			<if test="videoPath != null">video_path=#{videoPath,jdbcType=VARCHAR},</if>  
+			<if test="musicPath != null">music_path=#{musicPath,jdbcType=VARCHAR},</if>  
+			<if test="mediaId != null">media_id=#{mediaId,jdbcType=VARCHAR},</if>  
+			<if test="title != null">title=#{title,jdbcType=VARCHAR},</if>  
+			<if test="thumbUrl != null">thumb_url=#{thumbUrl,jdbcType=VARCHAR},</if>  
+			<if test="digest != null">digest=#{digest,jdbcType=VARCHAR},</if>  
+			<if test="type != null">type=#{type,jdbcType=TINYINT},</if>  
+			<if test="sort != null">sort=#{sort,jdbcType=INTEGER},</if>  
+			<if test="isShare != null">is_share=#{isShare,jdbcType=BOOLEAN},</if>  
+			<if test="waId != null">wa_id=#{waId,jdbcType=INTEGER},</if>  
+			<if test="addTime != null">add_time=#{addTime,jdbcType=TIMESTAMP},</if> 
+		</set> WHERE lm_id = #{lmId,jdbcType=INTEGER}
+	</update>
+	<!-- 根据指定条件更新不为NULL的字段 -->
+	<update id="updateNotNullByExpression">UPDATE wx_local_material 
+		<set> 
+			<if test="entity.name != null">name=#{entity.name,jdbcType=VARCHAR},</if>  
+			<if test="entity.weixinImgUrl != null">weixin_img_url=#{entity.weixinImgUrl,jdbcType=VARCHAR},</if>  
+			<if test="entity.locImgUrl != null">loc_img_url=#{entity.locImgUrl,jdbcType=VARCHAR},</if>  
+			<if test="entity.imgPath != null">img_path=#{entity.imgPath,jdbcType=VARCHAR},</if>  
+			<if test="entity.videoPath != null">video_path=#{entity.videoPath,jdbcType=VARCHAR},</if>  
+			<if test="entity.musicPath != null">music_path=#{entity.musicPath,jdbcType=VARCHAR},</if>  
+			<if test="entity.mediaId != null">media_id=#{entity.mediaId,jdbcType=VARCHAR},</if>  
+			<if test="entity.title != null">title=#{entity.title,jdbcType=VARCHAR},</if>  
+			<if test="entity.thumbUrl != null">thumb_url=#{entity.thumbUrl,jdbcType=VARCHAR},</if>  
+			<if test="entity.digest != null">digest=#{entity.digest,jdbcType=VARCHAR},</if>  
+			<if test="entity.type != null">type=#{entity.type,jdbcType=TINYINT},</if>  
+			<if test="entity.sort != null">sort=#{entity.sort,jdbcType=INTEGER},</if>  
+			<if test="entity.isShare != null">is_share=#{entity.isShare,jdbcType=BOOLEAN},</if>  
+			<if test="entity.waId != null">wa_id=#{entity.waId,jdbcType=INTEGER},</if>  
+			<if test="entity.addTime != null">add_time=#{entity.addTime,jdbcType=TIMESTAMP},</if> 
+		</set>  
+		<include refid="expressionBlock.updateWhere"/> 
+	</update>
+	<!-- 根据主键删除记录 -->
+	<delete id="del" parameterType="cn.com.weixin.common.entity.WxLocalMaterial">DELETE FROM wx_local_material WHERE lm_id = #{lmId,jdbcType=INTEGER}</delete>
+	<!-- 根据条件删除记录 -->
+	<delete id="delByExpression" parameterType="cn.com.goldfinance.jcframework.expression.ExpressionQuery">DELETE FROM wx_local_material 
+		<include refid="expressionBlock.where"/> 
+	</delete>
+	<!-- ======自定义SQL区域start====== -->
+	<!-- ======自定义SQL区域end====== -->
+</mapper>

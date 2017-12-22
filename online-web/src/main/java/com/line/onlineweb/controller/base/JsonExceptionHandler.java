@@ -5,6 +5,8 @@ import com.line.onlineweb.bean.JsonResult;
 import com.line.utils.StringUtils;
 import org.slf4j.Logger;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.validation.BindException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -27,14 +29,22 @@ public class JsonExceptionHandler {
         log.error(msg, e);
 
         if (e instanceof ErrorCodeException) {
-            json.errcode = ((ErrorCodeException) e).getErrcode();
+            ErrorCodeException we = (ErrorCodeException) e;
+            json.errcode = we.getErrcode();
+            json.errmsg = we.getMessage();
+        }else if (e instanceof MethodArgumentNotValidException){
+            MethodArgumentNotValidException we = (MethodArgumentNotValidException) e;
+            json.errmsg = we.getBindingResult().getAllErrors().get(0).getDefaultMessage();
+        }else if (e instanceof BindException){
+            BindException we = (BindException) e;
+            json.errmsg = we.getFieldErrors().get(0).getDefaultMessage();
         }
 
         /**
          * 如果有中文，错误信息为中文
          *  如果没有中文，按照异常类型进行翻译。
          */
-        if (null != msg && StringUtils.isContainsChinese(msg)) {
+        else if (null != msg && StringUtils.isContainsChinese(msg)) {
             json.errmsg = msg;
         } else {
             if (e instanceof HttpMessageNotReadableException) {

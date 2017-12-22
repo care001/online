@@ -16,6 +16,7 @@
         <module>online-tools</module>
         <module>online-web</module>
         <module>mybatis-generator</module>
+        <module>weixin-core</module>
     </modules>
 
 

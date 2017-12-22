@@ -24,7 +24,7 @@ CREATE TABLE IF NOT EXISTS `user_plan`(
 
 
 CREATE TABLE IF NOT EXISTS `foot_site`(
-   `id` BIGINT UNSIGNED AUTO_INCREMENT,
+   `id` BIGINT UNSIGNED,
    `name` VARCHAR(100) NOT NULL,
    `start_time` VARCHAR(100),
    `match_name` VARCHAR(40) NOT NULL,

@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.com.weixin.common.dao.WxReplyMsgDao">
+	<resultMap id="queryResultMap" type="cn.com.weixin.common.entity.WxReplyMsg">
+		<result column="rm_id" property="rmId" jdbcType="INTEGER"/>
+		<!-- 用户消息表主键 -->
+		<result column="um_id" property="umId" jdbcType="INTEGER"/>
+		<!-- 用户open_id -->
+		<result column="open_id" property="openId" jdbcType="VARCHAR"/>
+		<!-- 回复内容 -->
+		<result column="content" property="content" jdbcType="VARCHAR"/>
+		<!-- 回复的媒体ID -->
+		<result column="media_id" property="mediaId" jdbcType="VARCHAR"/>
+		<!-- 操作人 -->
+		<result column="opt_user" property="optUser" jdbcType="VARCHAR"/>
+		<result column="add_time" property="addTime" jdbcType="TIMESTAMP"/>
+	</resultMap>
+	<!-- 聚合查询 -->
+	<select id="findProjection" parameterType="cn.com.goldfinance.jcframework.expression.projection.ProjectionQuery" resultType="java.util.HashMap">SELECT 
+		<include refid="expressionBlock.projectionColumn"/> FROM `wx_reply_msg` t 
+		<include refid="expressionBlock.where"/>  
+		<include refid="expressionBlock.groupBy"/>  
+		<include refid="expressionBlock.having"/>  
+		<if test="orderable">ORDER BY ${order}</if> 
+	</select>
+	<!-- 根据条件查询记录 -->
+	<select id="find" parameterType="cn.com.goldfinance.jcframework.expression.ExpressionQuery" resultMap="queryResultMap">SELECT 
+		<choose>
+			<when test="columns.size&gt;0"> 
+				<foreach collection="columns" item="column" separator=",">${column}</foreach> 
+			</when>
+			<otherwise>t.`rm_id` , t.`um_id` , t.`open_id` , t.`content` , t.`media_id` , t.`opt_user` , t.`add_time`</otherwise>
+		</choose> FROM `wx_reply_msg` t
+		<include refid="expressionBlock.where"/>  
+		<choose>
+			<when test="orderable">ORDER BY ${order}</when>
+			<otherwise>ORDER BY t.`rm_id` desc</otherwise>
+		</choose>  
+		<if test="!isQueryAll">LIMIT #{start,jdbcType=INTEGER},#{limit,jdbcType=INTEGER}</if> 
+	</select>
+	<!-- 根据条件查询记录数 -->
+	<select id="findTotalCount" parameterType="cn.com.goldfinance.jcframework.expression.ExpressionQuery" resultType="java.lang.Integer">SELECT count(*) FROM `wx_reply_msg` t 
+		<include refid="expressionBlock.where"/> 
+	</select>
+	<!-- 根据主键获取单条记录 -->
+	<select id="get" resultMap="queryResultMap" parameterType="cn.com.weixin.common.entity.WxReplyMsg">SELECT t.`rm_id` , t.`um_id` , t.`open_id` , t.`content` , t.`media_id` , t.`opt_user` , t.`add_time` FROM `wx_reply_msg` t WHERE `rm_id` = #{rmId,jdbcType=INTEGER} LIMIT 1</select>
+	<!-- 根据条件获取单条记录 -->
+	<select id="getByExpression" resultMap="queryResultMap" parameterType="cn.com.goldfinance.jcframework.expression.ExpressionQuery">SELECT t.`rm_id` , t.`um_id` , t.`open_id` , t.`content` , t.`media_id` , t.`opt_user` , t.`add_time` FROM `wx_reply_msg` t
+		<include refid="expressionBlock.where"/> LIMIT 1
+	</select>
+	<!-- 保存,保存全部字段 -->
+	<insert id="save" parameterType="cn.com.weixin.common.entity.WxReplyMsg" keyProperty="rmId" keyColumn="rm_id" useGeneratedKeys="true">INSERT INTO `wx_reply_msg` ( `um_id` , `open_id` , `content` , `media_id` , `opt_user` , `add_time` ) VALUES ( #{umId,jdbcType=INTEGER} , #{openId,jdbcType=VARCHAR} , #{content,jdbcType=VARCHAR} , #{mediaId,jdbcType=VARCHAR} , #{optUser,jdbcType=VARCHAR} , #{addTime,jdbcType=TIMESTAMP} )</insert>
+	<!-- 保存,保存不为NULL的字段 -->
+	<insert id="saveNotNull" parameterType="cn.com.weixin.common.entity.WxReplyMsg" keyProperty="rmId" keyColumn="rm_id" useGeneratedKeys="true">INSERT INTO `wx_reply_msg`
+		<trim prefix="(" suffix=")" suffixOverrides=","> 
+			<if test="umId != null">`um_id`,</if>  
+			<if test="openId != null">`open_id`,</if>  
+			<if test="content != null">`content`,</if>  
+			<if test="mediaId != null">`media_id`,</if>  
+			<if test="optUser != null">`opt_user`,</if>  
+			<if test="addTime != null">`add_time`,</if> 
+		</trim>  
+		<trim prefix="values (" suffix=")" suffixOverrides=","> 
+			<if test="umId != null">#{umId,jdbcType=INTEGER},</if>  
+			<if test="openId != null">#{openId,jdbcType=VARCHAR},</if>  
+			<if test="content != null">#{content,jdbcType=VARCHAR},</if>  
+			<if test="mediaId != null">#{mediaId,jdbcType=VARCHAR},</if>  
+			<if test="optUser != null">#{optUser,jdbcType=VARCHAR},</if>  
+			<if test="addTime != null">#{addTime,jdbcType=TIMESTAMP},</if> 
+		</trim> 
+	</insert>
+	<!-- 更新,更新全部字段 -->
+	<update id="update" parameterType="cn.com.weixin.common.entity.WxReplyMsg">UPDATE `wx_reply_msg`
+		<set>`um_id`=#{umId,jdbcType=INTEGER}, `open_id`=#{openId,jdbcType=VARCHAR}, `content`=#{content,jdbcType=VARCHAR}, `media_id`=#{mediaId,jdbcType=VARCHAR}, `opt_user`=#{optUser,jdbcType=VARCHAR}, `add_time`=#{addTime,jdbcType=TIMESTAMP},</set> WHERE `rm_id` = #{rmId,jdbcType=INTEGER}
+	</update>
+	<!-- 根据指定条件更新 -->
+	<update id="updateByExpression">UPDATE `wx_reply_msg` 
+		<set>`um_id`=#{entity.umId,jdbcType=INTEGER}, `open_id`=#{entity.openId,jdbcType=VARCHAR}, `content`=#{entity.content,jdbcType=VARCHAR}, `media_id`=#{entity.mediaId,jdbcType=VARCHAR}, `opt_user`=#{entity.optUser,jdbcType=VARCHAR}, `add_time`=#{entity.addTime,jdbcType=TIMESTAMP},</set>  
+		<include refid="expressionBlock.updateWhere"/> 
+	</update>
+	<!-- 更新不为NULL的字段 -->
+	<update id="updateNotNull" parameterType="cn.com.weixin.common.entity.WxReplyMsg">UPDATE `wx_reply_msg`
+		<set> 
+			<if test="umId != null">`um_id`=#{umId,jdbcType=INTEGER},</if>  
+			<if test="openId != null">`open_id`=#{openId,jdbcType=VARCHAR},</if>  
+			<if test="content != null">`content`=#{content,jdbcType=VARCHAR},</if>  
+			<if test="mediaId != null">`media_id`=#{mediaId,jdbcType=VARCHAR},</if>  
+			<if test="optUser != null">`opt_user`=#{optUser,jdbcType=VARCHAR},</if>  
+			<if test="addTime != null">`add_time`=#{addTime,jdbcType=TIMESTAMP},</if> 
+		</set> WHERE `rm_id` = #{rmId,jdbcType=INTEGER}
+	</update>
+	<!-- 根据指定条件更新不为NULL的字段 -->
+	<update id="updateNotNullByExpression">UPDATE `wx_reply_msg` 
+		<set> 
+			<if test="entity.umId != null">`um_id`=#{entity.umId,jdbcType=INTEGER},</if>  
+			<if test="entity.openId != null">`open_id`=#{entity.openId,jdbcType=VARCHAR},</if>  
+			<if test="entity.content != null">`content`=#{entity.content,jdbcType=VARCHAR},</if>  
+			<if test="entity.mediaId != null">`media_id`=#{entity.mediaId,jdbcType=VARCHAR},</if>  
+			<if test="entity.optUser != null">`opt_user`=#{entity.optUser,jdbcType=VARCHAR},</if>  
+			<if test="entity.addTime != null">`add_time`=#{entity.addTime,jdbcType=TIMESTAMP},</if> 
+		</set>  
+		<include refid="expressionBlock.updateWhere"/> 
+	</update>
+	<!-- 根据主键删除记录 -->
+	<delete id="del" parameterType="cn.com.weixin.common.entity.WxReplyMsg">DELETE FROM `wx_reply_msg` WHERE `rm_id` = #{rmId,jdbcType=INTEGER}</delete>
+	<!-- 根据条件删除记录 -->
+	<delete id="delByExpression" parameterType="cn.com.goldfinance.jcframework.expression.ExpressionQuery">DELETE FROM `wx_reply_msg` 
+		<include refid="expressionBlock.where"/> 
+	</delete>
+	<!-- ======自定义SQL区域start====== -->
+	<!-- ======自定义SQL区域end====== -->
+</mapper>

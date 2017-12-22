@@ -1,0 +1,158 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Target Material Design Bootstrap Admin Template</title>
+	
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+	<link rel="stylesheet" href="assets/materialize/css/materialize.min.css" media="screen,projection" />
+    <!-- Bootstrap Styles-->
+    <link href="assets/css/bootstrap.css" rel="stylesheet" />
+    <!-- FontAwesome Styles-->
+    <link href="assets/css/font-awesome.css" rel="stylesheet" />
+    <!-- Morris Chart Styles-->
+    <link href="assets/js/morris/morris-0.4.3.min.css" rel="stylesheet" />
+    <!-- Custom Styles-->
+    <link href="assets/css/custom-styles.css" rel="stylesheet" />
+
+    <link rel="stylesheet" href="assets/js/Lightweight-Chart/cssCharts.css"> 
+</head>
+<body>
+    <div id="wrapper">
+        <!-- 头部 -->
+         <nav class="navbar navbar-default top-navbar" role="navigation">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".sidebar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand waves-effect waves-dark" href="tab-panel.html"><i class="large material-icons">track_changes</i> <strong>精选推送</strong></a>
+				
+		    <div id="sideNav" href=""><i class="material-icons dp48">toc</i></div>
+            </div>
+        </nav>
+
+        <!--左部  -->
+        <nav class="navbar-default navbar-side" role="navigation">
+            <div class="sidebar-collapse">
+                <ul class="nav" id="main-menu">
+                    <li>
+                        <a href="tab-panel.html" class="active-menu waves-effect waves-dark"><i class="fa fa-qrcode"></i> 中国体育彩票推荐</a>
+                    </li>
+                </ul>
+
+            </div>
+
+        </nav>
+
+        <!-- 右部 -->
+        <div id="page-wrapper" >
+            <!-- 右部头部  -->
+            <div class="header">
+                <h1 class="page-header">
+                    推荐
+                </h1>
+                <ol class="breadcrumb">
+                    <li><a href="#">首页</a></li>
+                    <li><a href="#">推荐</a></li>
+                    <li class="active">推荐</li>
+                </ol>
+            </div>
+            <!-- 右部正文  -->
+            <div id="page-inner">
+            <div class="row">
+                <div class="col-md-6 col-sm-6">
+                    <div class="card">
+                        <div class="card-action">
+                            Basic Tabs
+                        </div>
+                        <div class="card-content"> 
+							 <ul class="collapsible" data-collapsible="accordion" id="footInfo">
+								<li>
+								  <div class="collapsible-header"><i class="material-icons">assignment</i>无数据</div>
+								  <div class="collapsible-body">
+                                      <p>
+                                        无数据
+                                      </p>
+                                  </div>
+								</li>
+							  </ul> 
+                            
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- 尾部  -->
+				<!--<footer>
+                    <p>All right reserved. Template by: <a href="http://www.mycodes.net/">WebThemez.com</a></p>
+                </footer>-->
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- JS Scripts-->
+    <!-- jQuery Js -->
+    <script src="assets/js/jquery-1.10.2.js"></script>
+    <script type="text/javascript" src="../js/jquery.min.js"></script>
+	<!-- Bootstrap Js -->
+    <script src="assets/js/bootstrap.min.js"></script>
+	
+	<script src="assets/materialize/js/materialize.min.js"></script>
+	
+    <!-- Metis Menu Js -->
+    <script src="assets/js/jquery.metisMenu.js"></script>
+    <!-- Morris Chart Js -->
+    <script src="assets/js/morris/raphael-2.1.0.min.js"></script>
+    <script src="assets/js/morris/morris.js"></script>
+	
+	
+	<script src="assets/js/easypiechart.js"></script>
+	<script src="assets/js/easypiechart-data.js"></script>
+	
+	 <script src="assets/js/Lightweight-Chart/jquery.chart.js"></script>
+	
+    <!-- Custom Js -->
+    <script src="assets/js/custom-scripts.js"></script> 
+	<script>
+        $.ajax({
+            type: "post",
+            dataType: "json",
+            url: '/user/showHtmlPlan',
+            success: function (data) {
+                if(data.success){
+                    if (data.result.length>0) {
+                        $("#footInfo").html("");
+                        for(var i =0; i<data.result.length;i++){
+                            $("#footInfo").append(
+                                "<li>" +
+                                "<div class='collapsible-header'>" +
+                                "<i class='material-icons'>assignment</i>" +data.result[i].name +
+                                "</div>" +
+                                "<div class='collapsible-body'>" +
+                                "<p>"+data.result[i].info+"</p>" +
+                                "</div>" +
+                                "</li>"
+                            );
+                        }
+                    }
+                }else{
+                    alert(data.errmsg);
+                }
+
+            }
+        });
+
+
+    </script>
+
+ 
+
+</body>
+
+</html>

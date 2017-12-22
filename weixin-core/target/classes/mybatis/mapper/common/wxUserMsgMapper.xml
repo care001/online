@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.com.weixin.common.dao.WxUserMsgDao">
+	<resultMap id="queryResultMap" type="cn.com.weixin.common.entity.WxUserMsg">
+		<result column="um_id" property="umId" jdbcType="INTEGER"/>
+		<!-- 消息类型（text/image/location/link） -->
+		<result column="msg_type" property="msgType" jdbcType="VARCHAR"/>
+		<!-- 用户昵称 -->
+		<result column="nickname" property="nickname" jdbcType="VARCHAR"/>
+		<!-- 头像url -->
+		<result column="head_url" property="headUrl" jdbcType="VARCHAR"/>
+		<!-- 用户openId -->
+		<result column="open_id" property="openId" jdbcType="VARCHAR"/>
+		<!-- 接受的微信服务号 -->
+		<result column="to_username" property="toUsername" jdbcType="VARCHAR"/>
+		<!-- 消息内容 -->
+		<result column="content" property="content" jdbcType="VARCHAR"/>
+		<!-- 消息ID -->
+		<result column="msg_id" property="msgId" jdbcType="VARCHAR"/>
+		<!-- 用户发送图片地址 -->
+		<result column="pic_url" property="picUrl" jdbcType="VARCHAR"/>
+		<!-- 链接标题 -->
+		<result column="link_title" property="linkTitle" jdbcType="VARCHAR"/>
+		<!-- 链接消息描述 -->
+		<result column="link_description" property="linkDescription" jdbcType="VARCHAR"/>
+		<!-- 消息url -->
+		<result column="link_url" property="linkUrl" jdbcType="VARCHAR"/>
+		<!-- 地理维度 -->
+		<result column="loc_x" property="locX" jdbcType="VARCHAR"/>
+		<!-- 地理经度 -->
+		<result column="loc_y" property="locY" jdbcType="VARCHAR"/>
+		<!-- 地图缩放大小 -->
+		<result column="loc_scale" property="locScale" jdbcType="VARCHAR"/>
+		<!-- 地理位置信息 -->
+		<result column="loc_label" property="locLabel" jdbcType="VARCHAR"/>
+		<!-- 音乐名称 -->
+		<result column="music_title" property="musicTitle" jdbcType="VARCHAR"/>
+		<!-- 音乐描述 -->
+		<result column="music_description" property="musicDescription" jdbcType="VARCHAR"/>
+		<!-- 音乐链接 -->
+		<result column="music_url" property="musicUrl" jdbcType="VARCHAR"/>
+		<!-- 高质量音乐链接 -->
+		<result column="music_hqurl" property="musicHqurl" jdbcType="VARCHAR"/>
+		<!-- 语音媒体ID -->
+		<result column="voice_media_id" property="voiceMediaId" jdbcType="VARCHAR"/>
+		<!-- 语音格式 -->
+		<result column="voice_format" property="voiceFormat" jdbcType="VARCHAR"/>
+		<!-- 是否收藏 -->
+		<result column="is_star" property="isStar" jdbcType="BOOLEAN"/>
+		<!-- 是否关键词消息 -->
+		<result column="is_keywords" property="isKeywords" jdbcType="BOOLEAN"/>
+		<!-- 用户发送时间 -->
+		<result column="send_time" property="sendTime" jdbcType="TIMESTAMP"/>
+		<result column="add_time" property="addTime" jdbcType="TIMESTAMP"/>
+	</resultMap>
+	<!-- 聚合查询 -->
+	<select id="findProjection" parameterType="cn.com.goldfinance.jcframework.expression.projection.ProjectionQuery" resultType="java.util.HashMap">SELECT 
+		<include refid="expressionBlock.projectionColumn"/> FROM wx_user_msg t 
+		<include refid="expressionBlock.where"/>  
+		<include refid="expressionBlock.groupBy"/>  
+		<include refid="expressionBlock.having"/>  
+		<if test="orderable">ORDER BY ${order}</if> 
+	</select>
+	<!-- 根据条件查询记录 -->
+	<select id="find" parameterType="cn.com.goldfinance.jcframework.expression.ExpressionQuery" resultMap="queryResultMap">SELECT 
+		<choose>
+			<when test="columns.size&gt;0"> 
+				<foreach collection="columns" item="column" separator=",">${column}</foreach> 
+			</when>
+			<otherwise>t.um_id , t.msg_type , t.nickname , t.head_url , t.open_id , t.to_username , t.content , t.msg_id , t.pic_url , t.link_title , t.link_description , t.link_url , t.loc_x , t.loc_y , t.loc_scale , t.loc_label , t.music_title , t.music_description , t.music_url , t.music_hqurl , t.voice_media_id , t.voice_format , t.is_star , t.is_keywords , t.send_time , t.add_time</otherwise>
+		</choose> FROM wx_user_msg t
+		<include refid="expressionBlock.where"/>  
+		<choose>
+			<when test="orderable">ORDER BY ${order}</when>
+			<otherwise>ORDER BY t.um_id desc</otherwise>
+		</choose>  
+		<if test="!isQueryAll">LIMIT #{start,jdbcType=INTEGER},#{limit,jdbcType=INTEGER}</if> 
+	</select>
+	<!-- 根据条件查询记录数 -->
+	<select id="findTotalCount" parameterType="cn.com.goldfinance.jcframework.expression.ExpressionQuery" resultType="java.lang.Integer">SELECT count(*) FROM wx_user_msg t 
+		<include refid="expressionBlock.where"/> 
+	</select>
+	<!-- 根据主键获取单条记录 -->
+	<select id="get" resultMap="queryResultMap" parameterType="cn.com.weixin.common.entity.WxUserMsg">SELECT t.um_id , t.msg_type , t.nickname , t.head_url , t.open_id , t.to_username , t.content , t.msg_id , t.pic_url , t.link_title , t.link_description , t.link_url , t.loc_x , t.loc_y , t.loc_scale , t.loc_label , t.music_title , t.music_description , t.music_url , t.music_hqurl , t.voice_media_id , t.voice_format , t.is_star , t.is_keywords , t.send_time , t.add_time FROM wx_user_msg t WHERE um_id = #{umId,jdbcType=INTEGER} LIMIT 1</select>
+	<!-- 根据条件获取单条记录 -->
+	<select id="getByExpression" resultMap="queryResultMap" parameterType="cn.com.goldfinance.jcframework.expression.ExpressionQuery">SELECT t.um_id , t.msg_type , t.nickname , t.head_url , t.open_id , t.to_username , t.content , t.msg_id , t.pic_url , t.link_title , t.link_description , t.link_url , t.loc_x , t.loc_y , t.loc_scale , t.loc_label , t.music_title , t.music_description , t.music_url , t.music_hqurl , t.voice_media_id , t.voice_format , t.is_star , t.is_keywords , t.send_time , t.add_time FROM wx_user_msg t
+		<include refid="expressionBlock.where"/> LIMIT 1
+	</select>
+	<!-- 保存,保存全部字段 -->
+	<insert id="save" parameterType="cn.com.weixin.common.entity.WxUserMsg" keyProperty="umId" keyColumn="um_id" useGeneratedKeys="true">INSERT INTO wx_user_msg ( `msg_type` , `nickname` , `head_url` , `open_id` , `to_username` , `content` , `msg_id` , `pic_url` , `link_title` , `link_description` , `link_url` , `loc_x` , `loc_y` , `loc_scale` , `loc_label` , `music_title` , `music_description` , `music_url` , `music_hqurl` , `voice_media_id` , `voice_format` , `is_star` , `is_keywords` , `send_time` , `add_time` ) VALUES ( #{msgType,jdbcType=VARCHAR} , #{nickname,jdbcType=VARCHAR} , #{headUrl,jdbcType=VARCHAR} , #{openId,jdbcType=VARCHAR} , #{toUsername,jdbcType=VARCHAR} , #{content,jdbcType=VARCHAR} , #{msgId,jdbcType=VARCHAR} , #{picUrl,jdbcType=VARCHAR} , #{linkTitle,jdbcType=VARCHAR} , #{linkDescription,jdbcType=VARCHAR} , #{linkUrl,jdbcType=VARCHAR} , #{locX,jdbcType=VARCHAR} , #{locY,jdbcType=VARCHAR} , #{locScale,jdbcType=VARCHAR} , #{locLabel,jdbcType=VARCHAR} , #{musicTitle,jdbcType=VARCHAR} , #{musicDescription,jdbcType=VARCHAR} , #{musicUrl,jdbcType=VARCHAR} , #{musicHqurl,jdbcType=VARCHAR} , #{voiceMediaId,jdbcType=VARCHAR} , #{voiceFormat,jdbcType=VARCHAR} , #{isStar,jdbcType=BOOLEAN} , #{isKeywords,jdbcType=BOOLEAN} , #{sendTime,jdbcType=TIMESTAMP} , #{addTime,jdbcType=TIMESTAMP} )</insert>
+	<!-- 保存,保存不为NULL的字段 -->
+	<insert id="saveNotNull" parameterType="cn.com.weixin.common.entity.WxUserMsg" keyProperty="umId" keyColumn="um_id" useGeneratedKeys="true">INSERT INTO wx_user_msg
+		<trim prefix="(" suffix=")" suffixOverrides=","> 
+			<if test="msgType != null">`msg_type`,</if>  
+			<if test="nickname != null">`nickname`,</if>  
+			<if test="headUrl != null">`head_url`,</if>  
+			<if test="openId != null">`open_id`,</if>  
+			<if test="toUsername != null">`to_username`,</if>  
+			<if test="content != null">`content`,</if>  
+			<if test="msgId != null">`msg_id`,</if>  
+			<if test="picUrl != null">`pic_url`,</if>  
+			<if test="linkTitle != null">`link_title`,</if>  
+			<if test="linkDescription != null">`link_description`,</if>  
+			<if test="linkUrl != null">`link_url`,</if>  
+			<if test="locX != null">`loc_x`,</if>  
+			<if test="locY != null">`loc_y`,</if>  
+			<if test="locScale != null">`loc_scale`,</if>  
+			<if test="locLabel != null">`loc_label`,</if>  
+			<if test="musicTitle != null">`music_title`,</if>  
+			<if test="musicDescription != null">`music_description`,</if>  
+			<if test="musicUrl != null">`music_url`,</if>  
+			<if test="musicHqurl != null">`music_hqurl`,</if>  
+			<if test="voiceMediaId != null">`voice_media_id`,</if>  
+			<if test="voiceFormat != null">`voice_format`,</if>  
+			<if test="isStar != null">`is_star`,</if>  
+			<if test="isKeywords != null">`is_keywords`,</if>  
+			<if test="sendTime != null">`send_time`,</if>  
+			<if test="addTime != null">`add_time`,</if> 
+		</trim>  
+		<trim prefix="values (" suffix=")" suffixOverrides=","> 
+			<if test="msgType != null">#{msgType,jdbcType=VARCHAR},</if>  
+			<if test="nickname != null">#{nickname,jdbcType=VARCHAR},</if>  
+			<if test="headUrl != null">#{headUrl,jdbcType=VARCHAR},</if>  
+			<if test="openId != null">#{openId,jdbcType=VARCHAR},</if>  
+			<if test="toUsername != null">#{toUsername,jdbcType=VARCHAR},</if>  
+			<if test="content != null">#{content,jdbcType=VARCHAR},</if>  
+			<if test="msgId != null">#{msgId,jdbcType=VARCHAR},</if>  
+			<if test="picUrl != null">#{picUrl,jdbcType=VARCHAR},</if>  
+			<if test="linkTitle != null">#{linkTitle,jdbcType=VARCHAR},</if>  
+			<if test="linkDescription != null">#{linkDescription,jdbcType=VARCHAR},</if>  
+			<if test="linkUrl != null">#{linkUrl,jdbcType=VARCHAR},</if>  
+			<if test="locX != null">#{locX,jdbcType=VARCHAR},</if>  
+			<if test="locY != null">#{locY,jdbcType=VARCHAR},</if>  
+			<if test="locScale != null">#{locScale,jdbcType=VARCHAR},</if>  
+			<if test="locLabel != null">#{locLabel,jdbcType=VARCHAR},</if>  
+			<if test="musicTitle != null">#{musicTitle,jdbcType=VARCHAR},</if>  
+			<if test="musicDescription != null">#{musicDescription,jdbcType=VARCHAR},</if>  
+			<if test="musicUrl != null">#{musicUrl,jdbcType=VARCHAR},</if>  
+			<if test="musicHqurl != null">#{musicHqurl,jdbcType=VARCHAR},</if>  
+			<if test="voiceMediaId != null">#{voiceMediaId,jdbcType=VARCHAR},</if>  
+			<if test="voiceFormat != null">#{voiceFormat,jdbcType=VARCHAR},</if>  
+			<if test="isStar != null">#{isStar,jdbcType=BOOLEAN},</if>  
+			<if test="isKeywords != null">#{isKeywords,jdbcType=BOOLEAN},</if>  
+			<if test="sendTime != null">#{sendTime,jdbcType=TIMESTAMP},</if>  
+			<if test="addTime != null">#{addTime,jdbcType=TIMESTAMP},</if> 
+		</trim> 
+	</insert>
+	<!-- 更新,更新全部字段 -->
+	<update id="update" parameterType="cn.com.weixin.common.entity.WxUserMsg">UPDATE wx_user_msg
+		<set>msg_type=#{msgType,jdbcType=VARCHAR}, nickname=#{nickname,jdbcType=VARCHAR}, head_url=#{headUrl,jdbcType=VARCHAR}, open_id=#{openId,jdbcType=VARCHAR}, to_username=#{toUsername,jdbcType=VARCHAR}, content=#{content,jdbcType=VARCHAR}, msg_id=#{msgId,jdbcType=VARCHAR}, pic_url=#{picUrl,jdbcType=VARCHAR}, link_title=#{linkTitle,jdbcType=VARCHAR}, link_description=#{linkDescription,jdbcType=VARCHAR}, link_url=#{linkUrl,jdbcType=VARCHAR}, loc_x=#{locX,jdbcType=VARCHAR}, loc_y=#{locY,jdbcType=VARCHAR}, loc_scale=#{locScale,jdbcType=VARCHAR}, loc_label=#{locLabel,jdbcType=VARCHAR}, music_title=#{musicTitle,jdbcType=VARCHAR}, music_description=#{musicDescription,jdbcType=VARCHAR}, music_url=#{musicUrl,jdbcType=VARCHAR}, music_hqurl=#{musicHqurl,jdbcType=VARCHAR}, voice_media_id=#{voiceMediaId,jdbcType=VARCHAR}, voice_format=#{voiceFormat,jdbcType=VARCHAR}, is_star=#{isStar,jdbcType=BOOLEAN}, is_keywords=#{isKeywords,jdbcType=BOOLEAN}, send_time=#{sendTime,jdbcType=TIMESTAMP}, add_time=#{addTime,jdbcType=TIMESTAMP},</set> WHERE um_id = #{umId,jdbcType=INTEGER}
+	</update>
+	<!-- 根据指定条件更新 -->
+	<update id="updateByExpression">UPDATE wx_user_msg 
+		<set>msg_type=#{entity.msgType,jdbcType=VARCHAR}, nickname=#{entity.nickname,jdbcType=VARCHAR}, head_url=#{entity.headUrl,jdbcType=VARCHAR}, open_id=#{entity.openId,jdbcType=VARCHAR}, to_username=#{entity.toUsername,jdbcType=VARCHAR}, content=#{entity.content,jdbcType=VARCHAR}, msg_id=#{entity.msgId,jdbcType=VARCHAR}, pic_url=#{entity.picUrl,jdbcType=VARCHAR}, link_title=#{entity.linkTitle,jdbcType=VARCHAR}, link_description=#{entity.linkDescription,jdbcType=VARCHAR}, link_url=#{entity.linkUrl,jdbcType=VARCHAR}, loc_x=#{entity.locX,jdbcType=VARCHAR}, loc_y=#{entity.locY,jdbcType=VARCHAR}, loc_scale=#{entity.locScale,jdbcType=VARCHAR}, loc_label=#{entity.locLabel,jdbcType=VARCHAR}, music_title=#{entity.musicTitle,jdbcType=VARCHAR}, music_description=#{entity.musicDescription,jdbcType=VARCHAR}, music_url=#{entity.musicUrl,jdbcType=VARCHAR}, music_hqurl=#{entity.musicHqurl,jdbcType=VARCHAR}, voice_media_id=#{entity.voiceMediaId,jdbcType=VARCHAR}, voice_format=#{entity.voiceFormat,jdbcType=VARCHAR}, is_star=#{entity.isStar,jdbcType=BOOLEAN}, is_keywords=#{entity.isKeywords,jdbcType=BOOLEAN}, send_time=#{entity.sendTime,jdbcType=TIMESTAMP}, add_time=#{entity.addTime,jdbcType=TIMESTAMP},</set>  
+		<include refid="expressionBlock.updateWhere"/> 
+	</update>
+	<!-- 更新不为NULL的字段 -->
+	<update id="updateNotNull" parameterType="cn.com.weixin.common.entity.WxUserMsg">UPDATE wx_user_msg
+		<set> 
+			<if test="msgType != null">msg_type=#{msgType,jdbcType=VARCHAR},</if>  
+			<if test="nickname != null">nickname=#{nickname,jdbcType=VARCHAR},</if>  
+			<if test="headUrl != null">head_url=#{headUrl,jdbcType=VARCHAR},</if>  
+			<if test="openId != null">open_id=#{openId,jdbcType=VARCHAR},</if>  
+			<if test="toUsername != null">to_username=#{toUsername,jdbcType=VARCHAR},</if>  
+			<if test="content != null">content=#{content,jdbcType=VARCHAR},</if>  
+			<if test="msgId != null">msg_id=#{msgId,jdbcType=VARCHAR},</if>  
+			<if test="picUrl != null">pic_url=#{picUrl,jdbcType=VARCHAR},</if>  
+			<if test="linkTitle != null">link_title=#{linkTitle,jdbcType=VARCHAR},</if>  
+			<if test="linkDescription != null">link_description=#{linkDescription,jdbcType=VARCHAR},</if>  
+			<if test="linkUrl != null">link_url=#{linkUrl,jdbcType=VARCHAR},</if>  
+			<if test="locX != null">loc_x=#{locX,jdbcType=VARCHAR},</if>  
+			<if test="locY != null">loc_y=#{locY,jdbcType=VARCHAR},</if>  
+			<if test="locScale != null">loc_scale=#{locScale,jdbcType=VARCHAR},</if>  
+			<if test="locLabel != null">loc_label=#{locLabel,jdbcType=VARCHAR},</if>  
+			<if test="musicTitle != null">music_title=#{musicTitle,jdbcType=VARCHAR},</if>  
+			<if test="musicDescription != null">music_description=#{musicDescription,jdbcType=VARCHAR},</if>  
+			<if test="musicUrl != null">music_url=#{musicUrl,jdbcType=VARCHAR},</if>  
+			<if test="musicHqurl != null">music_hqurl=#{musicHqurl,jdbcType=VARCHAR},</if>  
+			<if test="voiceMediaId != null">voice_media_id=#{voiceMediaId,jdbcType=VARCHAR},</if>  
+			<if test="voiceFormat != null">voice_format=#{voiceFormat,jdbcType=VARCHAR},</if>  
+			<if test="isStar != null">is_star=#{isStar,jdbcType=BOOLEAN},</if>  
+			<if test="isKeywords != null">is_keywords=#{isKeywords,jdbcType=BOOLEAN},</if>  
+			<if test="sendTime != null">send_time=#{sendTime,jdbcType=TIMESTAMP},</if>  
+			<if test="addTime != null">add_time=#{addTime,jdbcType=TIMESTAMP},</if> 
+		</set> WHERE um_id = #{umId,jdbcType=INTEGER}
+	</update>
+	<!-- 根据指定条件更新不为NULL的字段 -->
+	<update id="updateNotNullByExpression">UPDATE wx_user_msg 
+		<set> 
+			<if test="entity.msgType != null">msg_type=#{entity.msgType,jdbcType=VARCHAR},</if>  
+			<if test="entity.nickname != null">nickname=#{entity.nickname,jdbcType=VARCHAR},</if>  
+			<if test="entity.headUrl != null">head_url=#{entity.headUrl,jdbcType=VARCHAR},</if>  
+			<if test="entity.openId != null">open_id=#{entity.openId,jdbcType=VARCHAR},</if>  
+			<if test="entity.toUsername != null">to_username=#{entity.toUsername,jdbcType=VARCHAR},</if>  
+			<if test="entity.content != null">content=#{entity.content,jdbcType=VARCHAR},</if>  
+			<if test="entity.msgId != null">msg_id=#{entity.msgId,jdbcType=VARCHAR},</if>  
+			<if test="entity.picUrl != null">pic_url=#{entity.picUrl,jdbcType=VARCHAR},</if>  
+			<if test="entity.linkTitle != null">link_title=#{entity.linkTitle,jdbcType=VARCHAR},</if>  
+			<if test="entity.linkDescription != null">link_description=#{entity.linkDescription,jdbcType=VARCHAR},</if>  
+			<if test="entity.linkUrl != null">link_url=#{entity.linkUrl,jdbcType=VARCHAR},</if>  
+			<if test="entity.locX != null">loc_x=#{entity.locX,jdbcType=VARCHAR},</if>  
+			<if test="entity.locY != null">loc_y=#{entity.locY,jdbcType=VARCHAR},</if>  
+			<if test="entity.locScale != null">loc_scale=#{entity.locScale,jdbcType=VARCHAR},</if>  
+			<if test="entity.locLabel != null">loc_label=#{entity.locLabel,jdbcType=VARCHAR},</if>  
+			<if test="entity.musicTitle != null">music_title=#{entity.musicTitle,jdbcType=VARCHAR},</if>  
+			<if test="entity.musicDescription != null">music_description=#{entity.musicDescription,jdbcType=VARCHAR},</if>  
+			<if test="entity.musicUrl != null">music_url=#{entity.musicUrl,jdbcType=VARCHAR},</if>  
+			<if test="entity.musicHqurl != null">music_hqurl=#{entity.musicHqurl,jdbcType=VARCHAR},</if>  
+			<if test="entity.voiceMediaId != null">voice_media_id=#{entity.voiceMediaId,jdbcType=VARCHAR},</if>  
+			<if test="entity.voiceFormat != null">voice_format=#{entity.voiceFormat,jdbcType=VARCHAR},</if>  
+			<if test="entity.isStar != null">is_star=#{entity.isStar,jdbcType=BOOLEAN},</if>  
+			<if test="entity.isKeywords != null">is_keywords=#{entity.isKeywords,jdbcType=BOOLEAN},</if>  
+			<if test="entity.sendTime != null">send_time=#{entity.sendTime,jdbcType=TIMESTAMP},</if>  
+			<if test="entity.addTime != null">add_time=#{entity.addTime,jdbcType=TIMESTAMP},</if> 
+		</set>  
+		<include refid="expressionBlock.updateWhere"/> 
+	</update>
+	<!-- 根据主键删除记录 -->
+	<delete id="del" parameterType="cn.com.weixin.common.entity.WxUserMsg">DELETE FROM wx_user_msg WHERE um_id = #{umId,jdbcType=INTEGER}</delete>
+	<!-- 根据条件删除记录 -->
+	<delete id="delByExpression" parameterType="cn.com.goldfinance.jcframework.expression.ExpressionQuery">DELETE FROM wx_user_msg 
+		<include refid="expressionBlock.where"/> 
+	</delete>
+	<!-- ======自定义SQL区域start====== -->
+	<!-- ======自定义SQL区域end====== -->
+</mapper>

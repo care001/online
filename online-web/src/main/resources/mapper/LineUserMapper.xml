@@ -144,7 +144,7 @@
     select
     <include refid="Base_Column_List" />
     from line_user
-    where login_name = #{loginname,jdbcType=VARCHAR}
+    where login_name = #{loginName,jdbcType=VARCHAR}
     and pwd =  #{pwd,jdbcType=VARCHAR}
   </select>
 </mapper>

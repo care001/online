@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.com.weixin.common.dao.WxLocalMaterialItemsDao">
+	<resultMap id="queryResultMap" type="cn.com.weixin.common.entity.WxLocalMaterialItems">
+		<result column="mi_id" property="miId" jdbcType="INTEGER"/>
+		<!-- 封面图片地址 -->
+		<result column="thumb_url" property="thumbUrl" jdbcType="VARCHAR"/>
+		<!-- 缩略图外键 -->
+		<result column="thumb_lm_id" property="thumbLmId" jdbcType="INTEGER"/>
+		<!-- 作者 -->
+		<result column="author" property="author" jdbcType="VARCHAR"/>
+		<!-- 标题 -->
+		<result column="title" property="title" jdbcType="VARCHAR"/>
+		<!-- 阅读原文链接 -->
+		<result column="source_url" property="sourceUrl" jdbcType="VARCHAR"/>
+		<!-- 图文消息内容 -->
+		<result column="content" property="content" jdbcType="VARCHAR"/>
+		<!-- 图文消息描述 -->
+		<result column="digest" property="digest" jdbcType="VARCHAR"/>
+		<!-- 是否显示封面,1显示,0不显示 -->
+		<result column="show_cover_pic" property="showCoverPic" jdbcType="VARCHAR"/>
+		<!-- 文章位置索引从0开始 -->
+		<result column="idx" property="idx" jdbcType="INTEGER"/>
+		<!-- 素材表主键 -->
+		<result column="lm_id" property="lmId" jdbcType="INTEGER"/>
+		<result column="add_time" property="addTime" jdbcType="TIMESTAMP"/>
+	</resultMap>
+	<!-- 聚合查询 -->
+	<select id="findProjection" parameterType="cn.com.goldfinance.jcframework.expression.projection.ProjectionQuery" resultType="java.util.HashMap">SELECT 
+		<include refid="expressionBlock.projectionColumn"/> FROM `wx_local_material_items` t 
+		<include refid="expressionBlock.where"/>  
+		<include refid="expressionBlock.groupBy"/>  
+		<include refid="expressionBlock.having"/>  
+		<if test="orderable">ORDER BY ${order}</if> 
+	</select>
+	<!-- 根据条件查询记录 -->
+	<select id="find" parameterType="cn.com.goldfinance.jcframework.expression.ExpressionQuery" resultMap="queryResultMap">SELECT 
+		<choose>
+			<when test="columns.size&gt;0"> 
+				<foreach collection="columns" item="column" separator=",">${column}</foreach> 
+			</when>
+			<otherwise>t.`mi_id` , t.`thumb_url` , t.`thumb_lm_id` , t.`author` , t.`title` , t.`source_url` , t.`content` , t.`digest` , t.`show_cover_pic` , t.`idx` , t.`lm_id` , t.`add_time`</otherwise>
+		</choose> FROM `wx_local_material_items` t
+		<include refid="expressionBlock.where"/>  
+		<choose>
+			<when test="orderable">ORDER BY ${order}</when>
+			<otherwise>ORDER BY t.`mi_id` desc</otherwise>
+		</choose>  
+		<if test="!isQueryAll">LIMIT #{start,jdbcType=INTEGER},#{limit,jdbcType=INTEGER}</if> 
+	</select>
+	<!-- 根据条件查询记录数 -->
+	<select id="findTotalCount" parameterType="cn.com.goldfinance.jcframework.expression.ExpressionQuery" resultType="java.lang.Integer">SELECT count(*) FROM `wx_local_material_items` t 
+		<include refid="expressionBlock.where"/> 
+	</select>
+	<!-- 根据主键获取单条记录 -->
+	<select id="get" resultMap="queryResultMap" parameterType="cn.com.weixin.common.entity.WxLocalMaterialItems">SELECT t.`mi_id` , t.`thumb_url` , t.`thumb_lm_id` , t.`author` , t.`title` , t.`source_url` , t.`content` , t.`digest` , t.`show_cover_pic` , t.`idx` , t.`lm_id` , t.`add_time` FROM `wx_local_material_items` t WHERE `mi_id` = #{miId,jdbcType=INTEGER} LIMIT 1</select>
+	<!-- 根据条件获取单条记录 -->
+	<select id="getByExpression" resultMap="queryResultMap" parameterType="cn.com.goldfinance.jcframework.expression.ExpressionQuery">SELECT t.`mi_id` , t.`thumb_url` , t.`thumb_lm_id` , t.`author` , t.`title` , t.`source_url` , t.`content` , t.`digest` , t.`show_cover_pic` , t.`idx` , t.`lm_id` , t.`add_time` FROM `wx_local_material_items` t
+		<include refid="expressionBlock.where"/> LIMIT 1
+	</select>
+	<!-- 保存,保存全部字段 -->
+	<insert id="save" parameterType="cn.com.weixin.common.entity.WxLocalMaterialItems" keyProperty="miId" keyColumn="mi_id" useGeneratedKeys="true">INSERT INTO `wx_local_material_items` ( `thumb_url` , `thumb_lm_id` , `author` , `title` , `source_url` , `content` , `digest` , `show_cover_pic` , `idx` , `lm_id` , `add_time` ) VALUES ( #{thumbUrl,jdbcType=VARCHAR} , #{thumbLmId,jdbcType=INTEGER} , #{author,jdbcType=VARCHAR} , #{title,jdbcType=VARCHAR} , #{sourceUrl,jdbcType=VARCHAR} , #{content,jdbcType=VARCHAR} , #{digest,jdbcType=VARCHAR} , #{showCoverPic,jdbcType=VARCHAR} , #{idx,jdbcType=INTEGER} , #{lmId,jdbcType=INTEGER} , #{addTime,jdbcType=TIMESTAMP} )</insert>
+	<!-- 保存,保存不为NULL的字段 -->
+	<insert id="saveNotNull" parameterType="cn.com.weixin.common.entity.WxLocalMaterialItems" keyProperty="miId" keyColumn="mi_id" useGeneratedKeys="true">INSERT INTO `wx_local_material_items`
+		<trim prefix="(" suffix=")" suffixOverrides=","> 
+			<if test="thumbUrl != null">`thumb_url`,</if>  
+			<if test="thumbLmId != null">`thumb_lm_id`,</if>  
+			<if test="author != null">`author`,</if>  
+			<if test="title != null">`title`,</if>  
+			<if test="sourceUrl != null">`source_url`,</if>  
+			<if test="content != null">`content`,</if>  
+			<if test="digest != null">`digest`,</if>  
+			<if test="showCoverPic != null">`show_cover_pic`,</if>  
+			<if test="idx != null">`idx`,</if>  
+			<if test="lmId != null">`lm_id`,</if>  
+			<if test="addTime != null">`add_time`,</if> 
+		</trim>  
+		<trim prefix="values (" suffix=")" suffixOverrides=","> 
+			<if test="thumbUrl != null">#{thumbUrl,jdbcType=VARCHAR},</if>  
+			<if test="thumbLmId != null">#{thumbLmId,jdbcType=INTEGER},</if>  
+			<if test="author != null">#{author,jdbcType=VARCHAR},</if>  
+			<if test="title != null">#{title,jdbcType=VARCHAR},</if>  
+			<if test="sourceUrl != null">#{sourceUrl,jdbcType=VARCHAR},</if>  
+			<if test="content != null">#{content,jdbcType=VARCHAR},</if>  
+			<if test="digest != null">#{digest,jdbcType=VARCHAR},</if>  
+			<if test="showCoverPic != null">#{showCoverPic,jdbcType=VARCHAR},</if>  
+			<if test="idx != null">#{idx,jdbcType=INTEGER},</if>  
+			<if test="lmId != null">#{lmId,jdbcType=INTEGER},</if>  
+			<if test="addTime != null">#{addTime,jdbcType=TIMESTAMP},</if> 
+		</trim> 
+	</insert>
+	<!-- 批量保存,保存全部字段 -->
+	<insert id="saveBatch">INSERT INTO `wx_local_material_items` ( `thumb_url` , `thumb_lm_id` , `author` , `title` , `source_url` , `content` , `digest` , `show_cover_pic` , `idx` , `lm_id` , `add_time` ) VALUES
+		<foreach collection="values" item="sql" separator=",">${sql}</foreach> 
+	</insert>
+	<!-- 批量保存,保存指定字段 -->
+	<insert id="saveBatchWithColomns">INSERT INTO `wx_local_material_items` ${columns} VALUES 
+		<foreach collection="values" item="sql" separator=",">${sql}</foreach> 
+	</insert>
+	<!-- 更新,更新全部字段 -->
+	<update id="update" parameterType="cn.com.weixin.common.entity.WxLocalMaterialItems">UPDATE `wx_local_material_items`
+		<set>`thumb_url`=#{thumbUrl,jdbcType=VARCHAR}, `thumb_lm_id`=#{thumbLmId,jdbcType=INTEGER}, `author`=#{author,jdbcType=VARCHAR}, `title`=#{title,jdbcType=VARCHAR}, `source_url`=#{sourceUrl,jdbcType=VARCHAR}, `content`=#{content,jdbcType=VARCHAR}, `digest`=#{digest,jdbcType=VARCHAR}, `show_cover_pic`=#{showCoverPic,jdbcType=VARCHAR}, `idx`=#{idx,jdbcType=INTEGER}, `lm_id`=#{lmId,jdbcType=INTEGER}, `add_time`=#{addTime,jdbcType=TIMESTAMP},</set> WHERE `mi_id` = #{miId,jdbcType=INTEGER}
+	</update>
+	<!-- 根据指定条件更新 -->
+	<update id="updateByExpression">UPDATE `wx_local_material_items` 
+		<set>`thumb_url`=#{entity.thumbUrl,jdbcType=VARCHAR}, `thumb_lm_id`=#{entity.thumbLmId,jdbcType=INTEGER}, `author`=#{entity.author,jdbcType=VARCHAR}, `title`=#{entity.title,jdbcType=VARCHAR}, `source_url`=#{entity.sourceUrl,jdbcType=VARCHAR}, `content`=#{entity.content,jdbcType=VARCHAR}, `digest`=#{entity.digest,jdbcType=VARCHAR}, `show_cover_pic`=#{entity.showCoverPic,jdbcType=VARCHAR}, `idx`=#{entity.idx,jdbcType=INTEGER}, `lm_id`=#{entity.lmId,jdbcType=INTEGER}, `add_time`=#{entity.addTime,jdbcType=TIMESTAMP},</set>  
+		<include refid="expressionBlock.updateWhere"/> 
+	</update>
+	<!-- 更新不为NULL的字段 -->
+	<update id="updateNotNull" parameterType="cn.com.weixin.common.entity.WxLocalMaterialItems">UPDATE `wx_local_material_items`
+		<set> 
+			<if test="thumbUrl != null">`thumb_url`=#{thumbUrl,jdbcType=VARCHAR},</if>  
+			<if test="thumbLmId != null">`thumb_lm_id`=#{thumbLmId,jdbcType=INTEGER},</if>  
+			<if test="author != null">`author`=#{author,jdbcType=VARCHAR},</if>  
+			<if test="title != null">`title`=#{title,jdbcType=VARCHAR},</if>  
+			<if test="sourceUrl != null">`source_url`=#{sourceUrl,jdbcType=VARCHAR},</if>  
+			<if test="content != null">`content`=#{content,jdbcType=VARCHAR},</if>  
+			<if test="digest != null">`digest`=#{digest,jdbcType=VARCHAR},</if>  
+			<if test="showCoverPic != null">`show_cover_pic`=#{showCoverPic,jdbcType=VARCHAR},</if>  
+			<if test="idx != null">`idx`=#{idx,jdbcType=INTEGER},</if>  
+			<if test="lmId != null">`lm_id`=#{lmId,jdbcType=INTEGER},</if>  
+			<if test="addTime != null">`add_time`=#{addTime,jdbcType=TIMESTAMP},</if> 
+		</set> WHERE `mi_id` = #{miId,jdbcType=INTEGER}
+	</update>
+	<!-- 根据指定条件更新不为NULL的字段 -->
+	<update id="updateNotNullByExpression">UPDATE `wx_local_material_items` 
+		<set> 
+			<if test="entity.thumbUrl != null">`thumb_url`=#{entity.thumbUrl,jdbcType=VARCHAR},</if>  
+			<if test="entity.thumbLmId != null">`thumb_lm_id`=#{entity.thumbLmId,jdbcType=INTEGER},</if>  
+			<if test="entity.author != null">`author`=#{entity.author,jdbcType=VARCHAR},</if>  
+			<if test="entity.title != null">`title`=#{entity.title,jdbcType=VARCHAR},</if>  
+			<if test="entity.sourceUrl != null">`source_url`=#{entity.sourceUrl,jdbcType=VARCHAR},</if>  
+			<if test="entity.content != null">`content`=#{entity.content,jdbcType=VARCHAR},</if>  
+			<if test="entity.digest != null">`digest`=#{entity.digest,jdbcType=VARCHAR},</if>  
+			<if test="entity.showCoverPic != null">`show_cover_pic`=#{entity.showCoverPic,jdbcType=VARCHAR},</if>  
+			<if test="entity.idx != null">`idx`=#{entity.idx,jdbcType=INTEGER},</if>  
+			<if test="entity.lmId != null">`lm_id`=#{entity.lmId,jdbcType=INTEGER},</if>  
+			<if test="entity.addTime != null">`add_time`=#{entity.addTime,jdbcType=TIMESTAMP},</if> 
+		</set>  
+		<include refid="expressionBlock.updateWhere"/> 
+	</update>
+	<!-- 根据主键删除记录 -->
+	<delete id="del" parameterType="cn.com.weixin.common.entity.WxLocalMaterialItems">DELETE FROM `wx_local_material_items` WHERE `mi_id` = #{miId,jdbcType=INTEGER}</delete>
+	<!-- 根据条件删除记录 -->
+	<delete id="delByExpression" parameterType="cn.com.goldfinance.jcframework.expression.ExpressionQuery">DELETE FROM `wx_local_material_items` 
+		<include refid="expressionBlock.where"/> 
+	</delete>
+	<!-- ======自定义SQL区域start====== -->
+	<!-- ======自定义SQL区域end====== -->
+</mapper>

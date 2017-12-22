@@ -38,12 +38,12 @@
         </javaClientGenerator>
 
         <!--对应数据库表名 -->
-        <table tableName="user_support" enableCountByExample="false"
+        <!--<table tableName="user_support" enableCountByExample="false"
                enableUpdateByExample="false" enableDeleteByExample="false"
                enableSelectByExample="false" selectByExampleQueryId="false">
 
-        </table>
-        <!--<table tableName="user_plan" enableCountByExample="false"
+        </table>-->
+        <table tableName="user_plan" enableCountByExample="false"
                enableUpdateByExample="false" enableDeleteByExample="false"
                enableSelectByExample="false" selectByExampleQueryId="false">
 
@@ -52,7 +52,7 @@
                enableUpdateByExample="false" enableDeleteByExample="false"
                enableSelectByExample="false" selectByExampleQueryId="false">
 
-        </table>-->
+        </table>
     </context>
     <!--<commentGenerator>-->
         <!--<property name="suppressDate" value="false"/>-->

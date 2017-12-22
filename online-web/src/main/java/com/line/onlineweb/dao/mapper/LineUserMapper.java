@@ -1,6 +1,7 @@
 package com.line.onlineweb.dao.mapper;
 
 import com.line.onlineweb.dao.entity.LineUser;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -53,5 +54,5 @@ public interface LineUserMapper {
      */
     int updateByPrimaryKey(LineUser record);
 
-    List<LineUser> findByNameAndPwd(String loginname, String pwd);
+    List<LineUser> findByNameAndPwd(@Param("loginName") String loginName, @Param("pwd")String pwd);
 }

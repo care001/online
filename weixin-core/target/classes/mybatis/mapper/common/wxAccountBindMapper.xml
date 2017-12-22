@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.com.weixin.common.dao.WxAccountBindDao">
+	<resultMap id="queryResultMap" type="cn.com.weixin.common.entity.WxAccountBind">
+		<result column="user_id" property="userId" jdbcType="INTEGER"/>
+		<result column="wa_id" property="waId" jdbcType="INTEGER"/>
+		<result column="add_time" property="addTime" jdbcType="TIMESTAMP"/>
+	</resultMap>
+	<!-- 聚合查询 -->
+	<select id="findProjection" parameterType="cn.com.goldfinance.jcframework.expression.projection.ProjectionQuery" resultType="java.util.HashMap">SELECT 
+		<include refid="expressionBlock.projectionColumn"/> FROM wx_account_bind t 
+		<include refid="expressionBlock.where"/>  
+		<include refid="expressionBlock.groupBy"/>  
+		<include refid="expressionBlock.having"/>  
+		<if test="orderable">ORDER BY ${order}</if> 
+	</select>
+	<!-- 根据条件查询记录 -->
+	<select id="find" parameterType="cn.com.goldfinance.jcframework.expression.ExpressionQuery" resultMap="queryResultMap">SELECT 
+		<choose>
+			<when test="columns.size&gt;0"> 
+				<foreach collection="columns" item="column" separator=",">${column}</foreach> 
+			</when>
+			<otherwise>t.user_id , t.wa_id , t.add_time</otherwise>
+		</choose> FROM wx_account_bind t
+		<include refid="expressionBlock.where"/>  
+		<choose>
+			<when test="orderable">ORDER BY ${order}</when>
+			<otherwise>ORDER BY t.user_id desc</otherwise>
+		</choose>  
+		<if test="!isQueryAll">LIMIT #{start,jdbcType=INTEGER},#{limit,jdbcType=INTEGER}</if> 
+	</select>
+	<!-- 根据条件查询记录数 -->
+	<select id="findTotalCount" parameterType="cn.com.goldfinance.jcframework.expression.ExpressionQuery" resultType="java.lang.Integer">SELECT count(*) FROM wx_account_bind t 
+		<include refid="expressionBlock.where"/> 
+	</select>
+	<!-- 根据主键获取单条记录 -->
+	<select id="get" resultMap="queryResultMap" parameterType="cn.com.weixin.common.entity.WxAccountBind">SELECT t.user_id , t.wa_id , t.add_time FROM wx_account_bind t WHERE user_id = #{userId,jdbcType=INTEGER} LIMIT 1</select>
+	<!-- 根据条件获取单条记录 -->
+	<select id="getByExpression" resultMap="queryResultMap" parameterType="cn.com.goldfinance.jcframework.expression.ExpressionQuery">SELECT t.user_id , t.wa_id , t.add_time FROM wx_account_bind t
+		<include refid="expressionBlock.where"/> LIMIT 1
+	</select>
+	<!-- 保存,保存全部字段 -->
+	<insert id="save" parameterType="cn.com.weixin.common.entity.WxAccountBind">INSERT INTO wx_account_bind ( `user_id` , `wa_id` , `add_time` ) VALUES ( #{userId,jdbcType=INTEGER} , #{waId,jdbcType=INTEGER} , #{addTime,jdbcType=TIMESTAMP} )</insert>
+	<!-- 保存,保存不为NULL的字段 -->
+	<insert id="saveNotNull" parameterType="cn.com.weixin.common.entity.WxAccountBind">INSERT INTO wx_account_bind
+		<trim prefix="(" suffix=")" suffixOverrides=","> 
+			<if test="userId != null">`user_id`,</if>  
+			<if test="waId != null">`wa_id`,</if>  
+			<if test="addTime != null">`add_time`,</if> 
+		</trim>  
+		<trim prefix="values (" suffix=")" suffixOverrides=","> 
+			<if test="userId != null">#{userId,jdbcType=INTEGER},</if>  
+			<if test="waId != null">#{waId,jdbcType=INTEGER},</if>  
+			<if test="addTime != null">#{addTime,jdbcType=TIMESTAMP},</if> 
+		</trim> 
+	</insert>
+	<!-- 更新,更新全部字段 -->
+	<update id="update" parameterType="cn.com.weixin.common.entity.WxAccountBind">UPDATE wx_account_bind
+		<set>add_time=#{addTime,jdbcType=TIMESTAMP},</set> WHERE user_id = #{userId,jdbcType=INTEGER}
+	</update>
+	<!-- 根据指定条件更新 -->
+	<update id="updateByExpression">UPDATE wx_account_bind 
+		<set>add_time=#{entity.addTime,jdbcType=TIMESTAMP},</set>  
+		<include refid="expressionBlock.updateWhere"/> 
+	</update>
+	<!-- 更新不为NULL的字段 -->
+	<update id="updateNotNull" parameterType="cn.com.weixin.common.entity.WxAccountBind">UPDATE wx_account_bind
+		<set> 
+			<if test="addTime != null">add_time=#{addTime,jdbcType=TIMESTAMP},</if> 
+		</set> WHERE user_id = #{userId,jdbcType=INTEGER}
+	</update>
+	<!-- 根据指定条件更新不为NULL的字段 -->
+	<update id="updateNotNullByExpression">UPDATE wx_account_bind 
+		<set> 
+			<if test="entity.addTime != null">add_time=#{entity.addTime,jdbcType=TIMESTAMP},</if> 
+		</set>  
+		<include refid="expressionBlock.updateWhere"/> 
+	</update>
+	<!-- 根据主键删除记录 -->
+	<delete id="del" parameterType="cn.com.weixin.common.entity.WxAccountBind">DELETE FROM wx_account_bind WHERE user_id = #{userId,jdbcType=INTEGER}</delete>
+	<!-- 根据条件删除记录 -->
+	<delete id="delByExpression" parameterType="cn.com.goldfinance.jcframework.expression.ExpressionQuery">DELETE FROM wx_account_bind 
+		<include refid="expressionBlock.where"/> 
+	</delete>
+	<!-- ======自定义SQL区域start====== -->
+	<!-- ======自定义SQL区域end====== -->
+</mapper>

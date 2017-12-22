@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.com.weixin.common.dao.WxDataExtDao">
+	<!-- ======自定义SQL区域start====== -->
+	<!-- 添加当天关注数量.+1 -->
+	<update id="addSubscribeCnt">
+		UPDATE `wx_data`
+		SET cnt = cnt + 1
+		WHERE `date` = CURDATE() AND `type` = 1
+		AND `original_id`=#{originalId}
+	</update>
+	
+	<!-- 增当天取消关注数量.+1-->
+	<update id="minusSubscribeCnt">
+		UPDATE `wx_data`
+		SET cnt = cnt + 1
+		WHERE `date` = CURDATE() AND `type` = 2
+		AND `original_id`=#{originalId}
+	</update>
+	<!-- ======自定义SQL区域end====== -->
+</mapper>

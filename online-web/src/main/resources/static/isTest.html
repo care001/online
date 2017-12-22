@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <title>投票</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!--苹果手机全屏问题-->
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
+    <meta content="yes" name="apple-mobile-web-app-capable" />
+    <meta content="black" name="apple-mobile-web-app-status-bar-style" />
+    <meta content="telephone=no" name="format-detection" />
+    <link rel="stylesheet" href="css/swiper-3.4.0.min.css">
+    <link href="css/sweet-alert.css" rel="stylesheet" type="text/css">
+
+
+    <link href="css/style.css" rel="stylesheet" type="text/css">
+
+</head>
+
+<body>
+<input type="text" id="code"/>
+<button value="验证" id="but"></button>
+<script type="text/javascript" src="js/jquery.min.js"></script>
+
+<script type="text/javascript">
+
+    $(function () {
+        $.ajax({
+            type: "get",
+            dataType: "json",
+            url: 'http://192.168.1.38:8888/H5Url/get_image_code',
+            data:{
+                phone:'13757629272',
+                t:'123456'
+            },
+            success: function (data) {
+                alert(data.toString());
+            }
+        });
+        $("#but").click(function () {
+            $.ajax({
+                type: "post",
+                dataType: "json",
+                url: 'http://water-pre.izhenglan.com/special/changeCollege/findNewCollege',
+                data:{
+                    phone:'13757629272',
+                    imageCode:$("#code").val()
+                },
+                success: function (data) {
+                    alert(data.toString());
+                }
+            });
+        });
+
+    });
+</script>
+
+</body>
+
+</html>

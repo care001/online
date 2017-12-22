@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.com.weixin.common.dao.WxUserOperateLogDao">
+	<resultMap id="queryResultMap" type="cn.com.weixin.common.entity.WxUserOperateLog">
+		<result column="uo_id" property="uoId" jdbcType="INTEGER"/>
+		<!-- 微信账号表主键 -->
+		<result column="wa_id" property="waId" jdbcType="INTEGER"/>
+		<!-- 微信名称 -->
+		<result column="weixin_name" property="weixinName" jdbcType="VARCHAR"/>
+		<!-- 操作人 -->
+		<result column="opt_user" property="optUser" jdbcType="VARCHAR"/>
+		<!-- 操作描述 -->
+		<result column="opt_descript" property="optDescript" jdbcType="VARCHAR"/>
+		<!-- 操作时间 -->
+		<result column="opt_time" property="optTime" jdbcType="TIMESTAMP"/>
+		<!-- 备注 -->
+		<result column="remark" property="remark" jdbcType="VARCHAR"/>
+		<!-- 扩展ID -->
+		<result column="ext_id" property="extId" jdbcType="VARCHAR"/>
+	</resultMap>
+	<!-- 聚合查询 -->
+	<select id="findProjection" parameterType="cn.com.goldfinance.jcframework.expression.projection.ProjectionQuery" resultType="java.util.HashMap">SELECT 
+		<include refid="expressionBlock.projectionColumn"/> FROM `wx_user_operate_log` t 
+		<include refid="expressionBlock.where"/>  
+		<include refid="expressionBlock.groupBy"/>  
+		<include refid="expressionBlock.having"/>  
+		<if test="orderable">ORDER BY ${order}</if> 
+	</select>
+	<!-- 根据条件查询记录 -->
+	<select id="find" parameterType="cn.com.goldfinance.jcframework.expression.ExpressionQuery" resultMap="queryResultMap">SELECT 
+		<choose>
+			<when test="columns.size&gt;0"> 
+				<foreach collection="columns" item="column" separator=",">${column}</foreach> 
+			</when>
+			<otherwise>t.`uo_id` , t.`wa_id` , t.`weixin_name` , t.`opt_user` , t.`opt_descript` , t.`opt_time` , t.`remark` , t.`ext_id`</otherwise>
+		</choose> FROM `wx_user_operate_log` t
+		<include refid="expressionBlock.where"/>  
+		<choose>
+			<when test="orderable">ORDER BY ${order}</when>
+			<otherwise>ORDER BY t.`uo_id` desc</otherwise>
+		</choose>  
+		<if test="!isQueryAll">LIMIT #{start,jdbcType=INTEGER},#{limit,jdbcType=INTEGER}</if> 
+	</select>
+	<!-- 根据条件查询记录数 -->
+	<select id="findTotalCount" parameterType="cn.com.goldfinance.jcframework.expression.ExpressionQuery" resultType="java.lang.Integer">SELECT count(*) FROM `wx_user_operate_log` t 
+		<include refid="expressionBlock.where"/> 
+	</select>
+	<!-- 根据主键获取单条记录 -->
+	<select id="get" resultMap="queryResultMap" parameterType="cn.com.weixin.common.entity.WxUserOperateLog">SELECT t.`uo_id` , t.`wa_id` , t.`weixin_name` , t.`opt_user` , t.`opt_descript` , t.`opt_time` , t.`remark` , t.`ext_id` FROM `wx_user_operate_log` t WHERE `uo_id` = #{uoId,jdbcType=INTEGER} LIMIT 1</select>
+	<!-- 根据条件获取单条记录 -->
+	<select id="getByExpression" resultMap="queryResultMap" parameterType="cn.com.goldfinance.jcframework.expression.ExpressionQuery">SELECT t.`uo_id` , t.`wa_id` , t.`weixin_name` , t.`opt_user` , t.`opt_descript` , t.`opt_time` , t.`remark` , t.`ext_id` FROM `wx_user_operate_log` t
+		<include refid="expressionBlock.where"/> LIMIT 1
+	</select>
+	<!-- 保存,保存全部字段 -->
+	<insert id="save" parameterType="cn.com.weixin.common.entity.WxUserOperateLog" keyProperty="uoId" keyColumn="uo_id" useGeneratedKeys="true">INSERT INTO `wx_user_operate_log` ( `wa_id` , `weixin_name` , `opt_user` , `opt_descript` , `opt_time` , `remark` , `ext_id` ) VALUES ( #{waId,jdbcType=INTEGER} , #{weixinName,jdbcType=VARCHAR} , #{optUser,jdbcType=VARCHAR} , #{optDescript,jdbcType=VARCHAR} , #{optTime,jdbcType=TIMESTAMP} , #{remark,jdbcType=VARCHAR} , #{extId,jdbcType=VARCHAR} )</insert>
+	<!-- 保存,保存不为NULL的字段 -->
+	<insert id="saveNotNull" parameterType="cn.com.weixin.common.entity.WxUserOperateLog" keyProperty="uoId" keyColumn="uo_id" useGeneratedKeys="true">INSERT INTO `wx_user_operate_log`
+		<trim prefix="(" suffix=")" suffixOverrides=","> 
+			<if test="waId != null">`wa_id`,</if>  
+			<if test="weixinName != null">`weixin_name`,</if>  
+			<if test="optUser != null">`opt_user`,</if>  
+			<if test="optDescript != null">`opt_descript`,</if>  
+			<if test="optTime != null">`opt_time`,</if>  
+			<if test="remark != null">`remark`,</if>  
+			<if test="extId != null">`ext_id`,</if> 
+		</trim>  
+		<trim prefix="values (" suffix=")" suffixOverrides=","> 
+			<if test="waId != null">#{waId,jdbcType=INTEGER},</if>  
+			<if test="weixinName != null">#{weixinName,jdbcType=VARCHAR},</if>  
+			<if test="optUser != null">#{optUser,jdbcType=VARCHAR},</if>  
+			<if test="optDescript != null">#{optDescript,jdbcType=VARCHAR},</if>  
+			<if test="optTime != null">#{optTime,jdbcType=TIMESTAMP},</if>  
+			<if test="remark != null">#{remark,jdbcType=VARCHAR},</if>  
+			<if test="extId != null">#{extId,jdbcType=VARCHAR},</if> 
+		</trim> 
+	</insert>
+	<!-- 批量保存,保存全部字段 -->
+	<insert id="saveBatch">INSERT INTO `wx_user_operate_log` ( `wa_id` , `weixin_name` , `opt_user` , `opt_descript` , `opt_time` , `remark` , `ext_id` ) VALUES
+		<foreach collection="values" item="sql" separator=",">${sql}</foreach> 
+	</insert>
+	<!-- 批量保存,保存指定字段 -->
+	<insert id="saveBatchWithColomns">INSERT INTO `wx_user_operate_log` ${columns} VALUES 
+		<foreach collection="values" item="sql" separator=",">${sql}</foreach> 
+	</insert>
+	<!-- 更新,更新全部字段 -->
+	<update id="update" parameterType="cn.com.weixin.common.entity.WxUserOperateLog">UPDATE `wx_user_operate_log`
+		<set>`wa_id`=#{waId,jdbcType=INTEGER}, `weixin_name`=#{weixinName,jdbcType=VARCHAR}, `opt_user`=#{optUser,jdbcType=VARCHAR}, `opt_descript`=#{optDescript,jdbcType=VARCHAR}, `opt_time`=#{optTime,jdbcType=TIMESTAMP}, `remark`=#{remark,jdbcType=VARCHAR}, `ext_id`=#{extId,jdbcType=VARCHAR},</set> WHERE `uo_id` = #{uoId,jdbcType=INTEGER}
+	</update>
+	<!-- 根据指定条件更新 -->
+	<update id="updateByExpression">UPDATE `wx_user_operate_log` 
+		<set>`wa_id`=#{entity.waId,jdbcType=INTEGER}, `weixin_name`=#{entity.weixinName,jdbcType=VARCHAR}, `opt_user`=#{entity.optUser,jdbcType=VARCHAR}, `opt_descript`=#{entity.optDescript,jdbcType=VARCHAR}, `opt_time`=#{entity.optTime,jdbcType=TIMESTAMP}, `remark`=#{entity.remark,jdbcType=VARCHAR}, `ext_id`=#{entity.extId,jdbcType=VARCHAR},</set>  
+		<include refid="expressionBlock.updateWhere"/> 
+	</update>
+	<!-- 更新不为NULL的字段 -->
+	<update id="updateNotNull" parameterType="cn.com.weixin.common.entity.WxUserOperateLog">UPDATE `wx_user_operate_log`
+		<set> 
+			<if test="waId != null">`wa_id`=#{waId,jdbcType=INTEGER},</if>  
+			<if test="weixinName != null">`weixin_name`=#{weixinName,jdbcType=VARCHAR},</if>  
+			<if test="optUser != null">`opt_user`=#{optUser,jdbcType=VARCHAR},</if>  
+			<if test="optDescript != null">`opt_descript`=#{optDescript,jdbcType=VARCHAR},</if>  
+			<if test="optTime != null">`opt_time`=#{optTime,jdbcType=TIMESTAMP},</if>  
+			<if test="remark != null">`remark`=#{remark,jdbcType=VARCHAR},</if>  
+			<if test="extId != null">`ext_id`=#{extId,jdbcType=VARCHAR},</if> 
+		</set> WHERE `uo_id` = #{uoId,jdbcType=INTEGER}
+	</update>
+	<!-- 根据指定条件更新不为NULL的字段 -->
+	<update id="updateNotNullByExpression">UPDATE `wx_user_operate_log` 
+		<set> 
+			<if test="entity.waId != null">`wa_id`=#{entity.waId,jdbcType=INTEGER},</if>  
+			<if test="entity.weixinName != null">`weixin_name`=#{entity.weixinName,jdbcType=VARCHAR},</if>  
+			<if test="entity.optUser != null">`opt_user`=#{entity.optUser,jdbcType=VARCHAR},</if>  
+			<if test="entity.optDescript != null">`opt_descript`=#{entity.optDescript,jdbcType=VARCHAR},</if>  
+			<if test="entity.optTime != null">`opt_time`=#{entity.optTime,jdbcType=TIMESTAMP},</if>  
+			<if test="entity.remark != null">`remark`=#{entity.remark,jdbcType=VARCHAR},</if>  
+			<if test="entity.extId != null">`ext_id`=#{entity.extId,jdbcType=VARCHAR},</if> 
+		</set>  
+		<include refid="expressionBlock.updateWhere"/> 
+	</update>
+	<!-- 根据主键删除记录 -->
+	<delete id="del" parameterType="cn.com.weixin.common.entity.WxUserOperateLog">DELETE FROM `wx_user_operate_log` WHERE `uo_id` = #{uoId,jdbcType=INTEGER}</delete>
+	<!-- 根据条件删除记录 -->
+	<delete id="delByExpression" parameterType="cn.com.goldfinance.jcframework.expression.ExpressionQuery">DELETE FROM `wx_user_operate_log` 
+		<include refid="expressionBlock.where"/> 
+	</delete>
+	<!-- ======自定义SQL区域start====== -->
+	<!-- ======自定义SQL区域end====== -->
+</mapper>

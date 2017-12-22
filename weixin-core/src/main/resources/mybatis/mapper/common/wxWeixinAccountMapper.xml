@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.com.weixin.common.dao.WxWeixinAccountDao">
+	<resultMap id="queryResultMap" type="cn.com.weixin.common.entity.WxWeixinAccount">
+		<!-- 主键自增字段 -->
+		<result column="wa_id" property="waId" jdbcType="INTEGER"/>
+		<!-- 微信名称 -->
+		<result column="name" property="name" jdbcType="VARCHAR"/>
+		<!-- 头像图片url -->
+		<result column="head_img" property="headImg" jdbcType="VARCHAR"/>
+		<!-- 公众号token -->
+		<result column="token" property="token" jdbcType="VARCHAR"/>
+		<!-- 公众号APPID -->
+		<result column="app_id" property="appId" jdbcType="VARCHAR"/>
+		<!-- 公众号APPSECRET -->
+		<result column="app_secret" property="appSecret" jdbcType="VARCHAR"/>
+		<!-- 微信公账号 -->
+		<result column="alias" property="alias" jdbcType="VARCHAR"/>
+		<!-- 原始ID -->
+		<result column="original_id" property="originalId" jdbcType="VARCHAR"/>
+		<!-- 公众号类型，0代表订阅号，1代表由历史老帐号升级后的订阅号，2代表服务号 -->
+		<result column="service_type" property="serviceType" jdbcType="TINYINT"/>
+		<!-- 管理者手机号 -->
+		<result column="mgr_mobile" property="mgrMobile" jdbcType="VARCHAR"/>
+		<!-- 管理者邮箱 -->
+		<result column="mgr_email" property="mgrEmail" jdbcType="VARCHAR"/>
+		<!-- 添加时间 -->
+		<result column="add_time" property="addTime" jdbcType="TIMESTAMP"/>
+		<!-- 备注 -->
+		<result column="remark" property="remark" jdbcType="VARCHAR"/>
+	</resultMap>
+	<!-- 聚合查询 -->
+	<select id="findProjection" parameterType="cn.com.goldfinance.jcframework.expression.projection.ProjectionQuery" resultType="java.util.HashMap">SELECT 
+		<include refid="expressionBlock.projectionColumn"/> FROM wx_weixin_account t 
+		<include refid="expressionBlock.where"/>  
+		<include refid="expressionBlock.groupBy"/>  
+		<include refid="expressionBlock.having"/>  
+		<if test="orderable">ORDER BY ${order}</if> 
+	</select>
+	<!-- 根据条件查询记录 -->
+	<select id="find" parameterType="cn.com.goldfinance.jcframework.expression.ExpressionQuery" resultMap="queryResultMap">SELECT 
+		<choose>
+			<when test="columns.size&gt;0"> 
+				<foreach collection="columns" item="column" separator=",">${column}</foreach> 
+			</when>
+			<otherwise>t.wa_id , t.name , t.head_img , t.token , t.app_id , t.app_secret , t.alias , t.original_id , t.service_type , t.mgr_mobile , t.mgr_email , t.add_time , t.remark</otherwise>
+		</choose> FROM wx_weixin_account t
+		<include refid="expressionBlock.where"/>  
+		<choose>
+			<when test="orderable">ORDER BY ${order}</when>
+			<otherwise>ORDER BY t.wa_id desc</otherwise>
+		</choose>  
+		<if test="!isQueryAll">LIMIT #{start,jdbcType=INTEGER},#{limit,jdbcType=INTEGER}</if> 
+	</select>
+	<!-- 根据条件查询记录数 -->
+	<select id="findTotalCount" parameterType="cn.com.goldfinance.jcframework.expression.ExpressionQuery" resultType="java.lang.Integer">SELECT count(*) FROM wx_weixin_account t 
+		<include refid="expressionBlock.where"/> 
+	</select>
+	<!-- 根据主键获取单条记录 -->
+	<select id="get" resultMap="queryResultMap" parameterType="cn.com.weixin.common.entity.WxWeixinAccount">SELECT t.wa_id , t.name , t.head_img , t.token , t.app_id , t.app_secret , t.alias , t.original_id , t.service_type , t.mgr_mobile , t.mgr_email , t.add_time , t.remark FROM wx_weixin_account t WHERE wa_id = #{waId,jdbcType=INTEGER} LIMIT 1</select>
+	<!-- 根据条件获取单条记录 -->
+	<select id="getByExpression" resultMap="queryResultMap" parameterType="cn.com.goldfinance.jcframework.expression.ExpressionQuery">SELECT t.wa_id , t.name , t.head_img , t.token , t.app_id , t.app_secret , t.alias , t.original_id , t.service_type , t.mgr_mobile , t.mgr_email , t.add_time , t.remark FROM wx_weixin_account t
+		<include refid="expressionBlock.where"/> LIMIT 1
+	</select>
+	<!-- 保存,保存全部字段 -->
+	<insert id="save" parameterType="cn.com.weixin.common.entity.WxWeixinAccount" keyProperty="waId" keyColumn="wa_id" useGeneratedKeys="true">INSERT INTO wx_weixin_account ( `name` , `head_img` , `token` , `app_id` , `app_secret` , `alias` , `original_id` , `service_type` , `mgr_mobile` , `mgr_email` , `add_time` , `remark` ) VALUES ( #{name,jdbcType=VARCHAR} , #{headImg,jdbcType=VARCHAR} , #{token,jdbcType=VARCHAR} , #{appId,jdbcType=VARCHAR} , #{appSecret,jdbcType=VARCHAR} , #{alias,jdbcType=VARCHAR} , #{originalId,jdbcType=VARCHAR} , #{serviceType,jdbcType=TINYINT} , #{mgrMobile,jdbcType=VARCHAR} , #{mgrEmail,jdbcType=VARCHAR} , #{addTime,jdbcType=TIMESTAMP} , #{remark,jdbcType=VARCHAR} )</insert>
+	<!-- 保存,保存不为NULL的字段 -->
+	<insert id="saveNotNull" parameterType="cn.com.weixin.common.entity.WxWeixinAccount" keyProperty="waId" keyColumn="wa_id" useGeneratedKeys="true">INSERT INTO wx_weixin_account
+		<trim prefix="(" suffix=")" suffixOverrides=","> 
+			<if test="name != null">`name`,</if>  
+			<if test="headImg != null">`head_img`,</if>  
+			<if test="token != null">`token`,</if>  
+			<if test="appId != null">`app_id`,</if>  
+			<if test="appSecret != null">`app_secret`,</if>  
+			<if test="alias != null">`alias`,</if>  
+			<if test="originalId != null">`original_id`,</if>  
+			<if test="serviceType != null">`service_type`,</if>  
+			<if test="mgrMobile != null">`mgr_mobile`,</if>  
+			<if test="mgrEmail != null">`mgr_email`,</if>  
+			<if test="addTime != null">`add_time`,</if>  
+			<if test="remark != null">`remark`,</if> 
+		</trim>  
+		<trim prefix="values (" suffix=")" suffixOverrides=","> 
+			<if test="name != null">#{name,jdbcType=VARCHAR},</if>  
+			<if test="headImg != null">#{headImg,jdbcType=VARCHAR},</if>  
+			<if test="token != null">#{token,jdbcType=VARCHAR},</if>  
+			<if test="appId != null">#{appId,jdbcType=VARCHAR},</if>  
+			<if test="appSecret != null">#{appSecret,jdbcType=VARCHAR},</if>  
+			<if test="alias != null">#{alias,jdbcType=VARCHAR},</if>  
+			<if test="originalId != null">#{originalId,jdbcType=VARCHAR},</if>  
+			<if test="serviceType != null">#{serviceType,jdbcType=TINYINT},</if>  
+			<if test="mgrMobile != null">#{mgrMobile,jdbcType=VARCHAR},</if>  
+			<if test="mgrEmail != null">#{mgrEmail,jdbcType=VARCHAR},</if>  
+			<if test="addTime != null">#{addTime,jdbcType=TIMESTAMP},</if>  
+			<if test="remark != null">#{remark,jdbcType=VARCHAR},</if> 
+		</trim> 
+	</insert>
+	<!-- 更新,更新全部字段 -->
+	<update id="update" parameterType="cn.com.weixin.common.entity.WxWeixinAccount">UPDATE wx_weixin_account
+		<set>name=#{name,jdbcType=VARCHAR}, head_img=#{headImg,jdbcType=VARCHAR}, token=#{token,jdbcType=VARCHAR}, app_id=#{appId,jdbcType=VARCHAR}, app_secret=#{appSecret,jdbcType=VARCHAR}, alias=#{alias,jdbcType=VARCHAR}, original_id=#{originalId,jdbcType=VARCHAR}, service_type=#{serviceType,jdbcType=TINYINT}, mgr_mobile=#{mgrMobile,jdbcType=VARCHAR}, mgr_email=#{mgrEmail,jdbcType=VARCHAR}, add_time=#{addTime,jdbcType=TIMESTAMP}, remark=#{remark,jdbcType=VARCHAR},</set> WHERE wa_id = #{waId,jdbcType=INTEGER}
+	</update>
+	<!-- 根据指定条件更新 -->
+	<update id="updateByExpression">UPDATE wx_weixin_account 
+		<set>name=#{entity.name,jdbcType=VARCHAR}, head_img=#{entity.headImg,jdbcType=VARCHAR}, token=#{entity.token,jdbcType=VARCHAR}, app_id=#{entity.appId,jdbcType=VARCHAR}, app_secret=#{entity.appSecret,jdbcType=VARCHAR}, alias=#{entity.alias,jdbcType=VARCHAR}, original_id=#{entity.originalId,jdbcType=VARCHAR}, service_type=#{entity.serviceType,jdbcType=TINYINT}, mgr_mobile=#{entity.mgrMobile,jdbcType=VARCHAR}, mgr_email=#{entity.mgrEmail,jdbcType=VARCHAR}, add_time=#{entity.addTime,jdbcType=TIMESTAMP}, remark=#{entity.remark,jdbcType=VARCHAR},</set>  
+		<include refid="expressionBlock.updateWhere"/> 
+	</update>
+	<!-- 更新不为NULL的字段 -->
+	<update id="updateNotNull" parameterType="cn.com.weixin.common.entity.WxWeixinAccount">UPDATE wx_weixin_account
+		<set> 
+			<if test="name != null">name=#{name,jdbcType=VARCHAR},</if>  
+			<if test="headImg != null">head_img=#{headImg,jdbcType=VARCHAR},</if>  
+			<if test="token != null">token=#{token,jdbcType=VARCHAR},</if>  
+			<if test="appId != null">app_id=#{appId,jdbcType=VARCHAR},</if>  
+			<if test="appSecret != null">app_secret=#{appSecret,jdbcType=VARCHAR},</if>  
+			<if test="alias != null">alias=#{alias,jdbcType=VARCHAR},</if>  
+			<if test="originalId != null">original_id=#{originalId,jdbcType=VARCHAR},</if>  
+			<if test="serviceType != null">service_type=#{serviceType,jdbcType=TINYINT},</if>  
+			<if test="mgrMobile != null">mgr_mobile=#{mgrMobile,jdbcType=VARCHAR},</if>  
+			<if test="mgrEmail != null">mgr_email=#{mgrEmail,jdbcType=VARCHAR},</if>  
+			<if test="addTime != null">add_time=#{addTime,jdbcType=TIMESTAMP},</if>  
+			<if test="remark != null">remark=#{remark,jdbcType=VARCHAR},</if> 
+		</set> WHERE wa_id = #{waId,jdbcType=INTEGER}
+	</update>
+	<!-- 根据指定条件更新不为NULL的字段 -->
+	<update id="updateNotNullByExpression">UPDATE wx_weixin_account 
+		<set> 
+			<if test="entity.name != null">name=#{entity.name,jdbcType=VARCHAR},</if>  
+			<if test="entity.headImg != null">head_img=#{entity.headImg,jdbcType=VARCHAR},</if>  
+			<if test="entity.token != null">token=#{entity.token,jdbcType=VARCHAR},</if>  
+			<if test="entity.appId != null">app_id=#{entity.appId,jdbcType=VARCHAR},</if>  
+			<if test="entity.appSecret != null">app_secret=#{entity.appSecret,jdbcType=VARCHAR},</if>  
+			<if test="entity.alias != null">alias=#{entity.alias,jdbcType=VARCHAR},</if>  
+			<if test="entity.originalId != null">original_id=#{entity.originalId,jdbcType=VARCHAR},</if>  
+			<if test="entity.serviceType != null">service_type=#{entity.serviceType,jdbcType=TINYINT},</if>  
+			<if test="entity.mgrMobile != null">mgr_mobile=#{entity.mgrMobile,jdbcType=VARCHAR},</if>  
+			<if test="entity.mgrEmail != null">mgr_email=#{entity.mgrEmail,jdbcType=VARCHAR},</if>  
+			<if test="entity.addTime != null">add_time=#{entity.addTime,jdbcType=TIMESTAMP},</if>  
+			<if test="entity.remark != null">remark=#{entity.remark,jdbcType=VARCHAR},</if> 
+		</set>  
+		<include refid="expressionBlock.updateWhere"/> 
+	</update>
+	<!-- 根据主键删除记录 -->
+	<delete id="del" parameterType="cn.com.weixin.common.entity.WxWeixinAccount">DELETE FROM wx_weixin_account WHERE wa_id = #{waId,jdbcType=INTEGER}</delete>
+	<!-- 根据条件删除记录 -->
+	<delete id="delByExpression" parameterType="cn.com.goldfinance.jcframework.expression.ExpressionQuery">DELETE FROM wx_weixin_account 
+		<include refid="expressionBlock.where"/> 
+	</delete>
+	<!-- ======自定义SQL区域start====== -->
+	<!-- ======自定义SQL区域end====== -->
+</mapper>

@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.com.weixin.common.dao.WxBackuserDao">
+	<resultMap id="queryResultMap" type="cn.com.weixin.common.entity.WxBackuser">
+		<result column="id" property="id" jdbcType="INTEGER"/>
+		<!-- 用户名 -->
+		<result column="username" property="username" jdbcType="VARCHAR"/>
+		<!-- 姓名 -->
+		<result column="real_name" property="realName" jdbcType="VARCHAR"/>
+		<!-- 密码 -->
+		<result column="password" property="password" jdbcType="VARCHAR"/>
+		<!-- 手机号 -->
+		<result column="mobile" property="mobile" jdbcType="VARCHAR"/>
+		<!-- 邮箱 -->
+		<result column="email" property="email" jdbcType="VARCHAR"/>
+		<!-- 状态 -->
+		<result column="state" property="state" jdbcType="TINYINT"/>
+		<!-- 登录次数 -->
+		<result column="login_cnt" property="loginCnt" jdbcType="INTEGER"/>
+		<!-- 最后一次登录时间 -->
+		<result column="last_login_time" property="lastLoginTime" jdbcType="TIMESTAMP"/>
+		<!-- 是否删除,0:未删除,1:已删除 -->
+		<result column="is_del" property="isDel" jdbcType="BOOLEAN"/>
+		<!-- 添加时间 -->
+		<result column="add_time" property="addTime" jdbcType="TIMESTAMP"/>
+	</resultMap>
+	<!-- 聚合查询 -->
+	<select id="findProjection" parameterType="cn.com.goldfinance.jcframework.expression.projection.ProjectionQuery" resultType="java.util.HashMap">SELECT 
+		<include refid="expressionBlock.projectionColumn"/> FROM wx_backuser t 
+		<include refid="expressionBlock.where"/>  
+		<include refid="expressionBlock.groupBy"/>  
+		<include refid="expressionBlock.having"/>  
+		<if test="orderable">ORDER BY ${order}</if> 
+	</select>
+	<!-- 根据条件查询记录 -->
+	<select id="find" parameterType="cn.com.goldfinance.jcframework.expression.ExpressionQuery" resultMap="queryResultMap">SELECT 
+		<choose>
+			<when test="columns.size&gt;0"> 
+				<foreach collection="columns" item="column" separator=",">${column}</foreach> 
+			</when>
+			<otherwise>t.id , t.username , t.real_name , t.password , t.mobile , t.email , t.state , t.login_cnt , t.last_login_time , t.is_del , t.add_time</otherwise>
+		</choose> FROM wx_backuser t
+		<include refid="expressionBlock.where"/>  
+		<choose>
+			<when test="orderable">ORDER BY ${order}</when>
+			<otherwise>ORDER BY t.id desc</otherwise>
+		</choose>  
+		<if test="!isQueryAll">LIMIT #{start,jdbcType=INTEGER},#{limit,jdbcType=INTEGER}</if> 
+	</select>
+	<!-- 根据条件查询记录数 -->
+	<select id="findTotalCount" parameterType="cn.com.goldfinance.jcframework.expression.ExpressionQuery" resultType="java.lang.Integer">SELECT count(*) FROM wx_backuser t 
+		<include refid="expressionBlock.where"/> 
+	</select>
+	<!-- 根据主键获取单条记录 -->
+	<select id="get" resultMap="queryResultMap" parameterType="cn.com.weixin.common.entity.WxBackuser">SELECT t.id , t.username , t.real_name , t.password , t.mobile , t.email , t.state , t.login_cnt , t.last_login_time , t.is_del , t.add_time FROM wx_backuser t WHERE id = #{id,jdbcType=INTEGER} LIMIT 1</select>
+	<!-- 根据条件获取单条记录 -->
+	<select id="getByExpression" resultMap="queryResultMap" parameterType="cn.com.goldfinance.jcframework.expression.ExpressionQuery">SELECT t.id , t.username , t.real_name , t.password , t.mobile , t.email , t.state , t.login_cnt , t.last_login_time , t.is_del , t.add_time FROM wx_backuser t
+		<include refid="expressionBlock.where"/> LIMIT 1
+	</select>
+	<!-- 保存,保存全部字段 -->
+	<insert id="save" parameterType="cn.com.weixin.common.entity.WxBackuser" keyProperty="id" keyColumn="id" useGeneratedKeys="true">INSERT INTO wx_backuser ( `username` , `real_name` , `password` , `mobile` , `email` , `state` , `login_cnt` , `last_login_time` , `is_del` , `add_time` ) VALUES ( #{username,jdbcType=VARCHAR} , #{realName,jdbcType=VARCHAR} , #{password,jdbcType=VARCHAR} , #{mobile,jdbcType=VARCHAR} , #{email,jdbcType=VARCHAR} , #{state,jdbcType=TINYINT} , #{loginCnt,jdbcType=INTEGER} , #{lastLoginTime,jdbcType=TIMESTAMP} , #{isDel,jdbcType=BOOLEAN} , #{addTime,jdbcType=TIMESTAMP} )</insert>
+	<!-- 保存,保存不为NULL的字段 -->
+	<insert id="saveNotNull" parameterType="cn.com.weixin.common.entity.WxBackuser" keyProperty="id" keyColumn="id" useGeneratedKeys="true">INSERT INTO wx_backuser
+		<trim prefix="(" suffix=")" suffixOverrides=","> 
+			<if test="username != null">`username`,</if>  
+			<if test="realName != null">`real_name`,</if>  
+			<if test="password != null">`password`,</if>  
+			<if test="mobile != null">`mobile`,</if>  
+			<if test="email != null">`email`,</if>  
+			<if test="state != null">`state`,</if>  
+			<if test="loginCnt != null">`login_cnt`,</if>  
+			<if test="lastLoginTime != null">`last_login_time`,</if>  
+			<if test="isDel != null">`is_del`,</if>  
+			<if test="addTime != null">`add_time`,</if> 
+		</trim>  
+		<trim prefix="values (" suffix=")" suffixOverrides=","> 
+			<if test="username != null">#{username,jdbcType=VARCHAR},</if>  
+			<if test="realName != null">#{realName,jdbcType=VARCHAR},</if>  
+			<if test="password != null">#{password,jdbcType=VARCHAR},</if>  
+			<if test="mobile != null">#{mobile,jdbcType=VARCHAR},</if>  
+			<if test="email != null">#{email,jdbcType=VARCHAR},</if>  
+			<if test="state != null">#{state,jdbcType=TINYINT},</if>  
+			<if test="loginCnt != null">#{loginCnt,jdbcType=INTEGER},</if>  
+			<if test="lastLoginTime != null">#{lastLoginTime,jdbcType=TIMESTAMP},</if>  
+			<if test="isDel != null">#{isDel,jdbcType=BOOLEAN},</if>  
+			<if test="addTime != null">#{addTime,jdbcType=TIMESTAMP},</if> 
+		</trim> 
+	</insert>
+	<!-- 更新,更新全部字段 -->
+	<update id="update" parameterType="cn.com.weixin.common.entity.WxBackuser">UPDATE wx_backuser
+		<set>username=#{username,jdbcType=VARCHAR}, real_name=#{realName,jdbcType=VARCHAR}, password=#{password,jdbcType=VARCHAR}, mobile=#{mobile,jdbcType=VARCHAR}, email=#{email,jdbcType=VARCHAR}, state=#{state,jdbcType=TINYINT}, login_cnt=#{loginCnt,jdbcType=INTEGER}, last_login_time=#{lastLoginTime,jdbcType=TIMESTAMP}, is_del=#{isDel,jdbcType=BOOLEAN}, add_time=#{addTime,jdbcType=TIMESTAMP},</set> WHERE id = #{id,jdbcType=INTEGER}
+	</update>
+	<!-- 根据指定条件更新 -->
+	<update id="updateByExpression">UPDATE wx_backuser 
+		<set>username=#{entity.username,jdbcType=VARCHAR}, real_name=#{entity.realName,jdbcType=VARCHAR}, password=#{entity.password,jdbcType=VARCHAR}, mobile=#{entity.mobile,jdbcType=VARCHAR}, email=#{entity.email,jdbcType=VARCHAR}, state=#{entity.state,jdbcType=TINYINT}, login_cnt=#{entity.loginCnt,jdbcType=INTEGER}, last_login_time=#{entity.lastLoginTime,jdbcType=TIMESTAMP}, is_del=#{entity.isDel,jdbcType=BOOLEAN}, add_time=#{entity.addTime,jdbcType=TIMESTAMP},</set>  
+		<include refid="expressionBlock.updateWhere"/> 
+	</update>
+	<!-- 更新不为NULL的字段 -->
+	<update id="updateNotNull" parameterType="cn.com.weixin.common.entity.WxBackuser">UPDATE wx_backuser
+		<set> 
+			<if test="username != null">username=#{username,jdbcType=VARCHAR},</if>  
+			<if test="realName != null">real_name=#{realName,jdbcType=VARCHAR},</if>  
+			<if test="password != null">password=#{password,jdbcType=VARCHAR},</if>  
+			<if test="mobile != null">mobile=#{mobile,jdbcType=VARCHAR},</if>  
+			<if test="email != null">email=#{email,jdbcType=VARCHAR},</if>  
+			<if test="state != null">state=#{state,jdbcType=TINYINT},</if>  
+			<if test="loginCnt != null">login_cnt=#{loginCnt,jdbcType=INTEGER},</if>  
+			<if test="lastLoginTime != null">last_login_time=#{lastLoginTime,jdbcType=TIMESTAMP},</if>  
+			<if test="isDel != null">is_del=#{isDel,jdbcType=BOOLEAN},</if>  
+			<if test="addTime != null">add_time=#{addTime,jdbcType=TIMESTAMP},</if> 
+		</set> WHERE id = #{id,jdbcType=INTEGER}
+	</update>
+	<!-- 根据指定条件更新不为NULL的字段 -->
+	<update id="updateNotNullByExpression">UPDATE wx_backuser 
+		<set> 
+			<if test="entity.username != null">username=#{entity.username,jdbcType=VARCHAR},</if>  
+			<if test="entity.realName != null">real_name=#{entity.realName,jdbcType=VARCHAR},</if>  
+			<if test="entity.password != null">password=#{entity.password,jdbcType=VARCHAR},</if>  
+			<if test="entity.mobile != null">mobile=#{entity.mobile,jdbcType=VARCHAR},</if>  
+			<if test="entity.email != null">email=#{entity.email,jdbcType=VARCHAR},</if>  
+			<if test="entity.state != null">state=#{entity.state,jdbcType=TINYINT},</if>  
+			<if test="entity.loginCnt != null">login_cnt=#{entity.loginCnt,jdbcType=INTEGER},</if>  
+			<if test="entity.lastLoginTime != null">last_login_time=#{entity.lastLoginTime,jdbcType=TIMESTAMP},</if>  
+			<if test="entity.isDel != null">is_del=#{entity.isDel,jdbcType=BOOLEAN},</if>  
+			<if test="entity.addTime != null">add_time=#{entity.addTime,jdbcType=TIMESTAMP},</if> 
+		</set>  
+		<include refid="expressionBlock.updateWhere"/> 
+	</update>
+	<!-- 根据主键删除记录 -->
+	<delete id="del" parameterType="cn.com.weixin.common.entity.WxBackuser">DELETE FROM wx_backuser WHERE id = #{id,jdbcType=INTEGER}</delete>
+	<!-- 根据条件删除记录 -->
+	<delete id="delByExpression" parameterType="cn.com.goldfinance.jcframework.expression.ExpressionQuery">DELETE FROM wx_backuser 
+		<include refid="expressionBlock.where"/> 
+	</delete>
+	<!-- ======自定义SQL区域start====== -->
+	<!-- ======自定义SQL区域end====== -->
+</mapper>

@@ -1,5 +1,6 @@
 package com.line.onlineweb.service;
 
+import com.line.onlineweb.controller.vo.OnePlanVo;
 import com.line.onlineweb.dao.entity.UserPlan;
 import com.line.onlineweb.service.dto.FootShowDTO;
 import com.line.onlineweb.service.dto.Page;
@@ -22,4 +23,6 @@ public interface FootShowService {
     Page<FootShowDTO> findBySeachMap(FootShowParam param, Page<FootShowDTO> foots);
 
     UserPlan findUserPlanById(Long id);
+
+    void addOnePlan(OnePlanVo planVo, Long userId);
 }

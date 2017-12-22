@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.com.weixin.common.dao.WxTagDao">
+	<resultMap id="queryResultMap" type="cn.com.weixin.common.entity.WxTag">
+		<!-- 标签表 -->
+		<result column="id" property="id" jdbcType="INTEGER"/>
+		<!-- 标签名称 -->
+		<result column="tag_name" property="tagName" jdbcType="VARCHAR"/>
+		<!-- 外键   用户公众号表的id -->
+		<result column="wa_id" property="waId" jdbcType="INTEGER"/>
+		<!-- 微信创建的标签的id -->
+		<result column="wx_tag_id" property="wxTagId" jdbcType="INTEGER"/>
+		<!-- 公众号原始id -->
+		<result column="original_id" property="originalId" jdbcType="VARCHAR"/>
+		<!-- 该标签用户的数量  ( 目前暂不使用 ) -->
+		<result column="user_count" property="userCount" jdbcType="INTEGER"/>
+		<!-- 创建时间 -->
+		<result column="add_time" property="addTime" jdbcType="TIMESTAMP"/>
+	</resultMap>
+	<!-- 聚合查询 -->
+	<select id="findProjection" parameterType="cn.com.goldfinance.jcframework.expression.projection.ProjectionQuery" resultType="java.util.HashMap">SELECT 
+		<include refid="expressionBlock.projectionColumn"/> FROM `wx_tag` t 
+		<include refid="expressionBlock.where"/>  
+		<include refid="expressionBlock.groupBy"/>  
+		<include refid="expressionBlock.having"/>  
+		<if test="orderable">ORDER BY ${order}</if> 
+	</select>
+	<!-- 根据条件查询记录 -->
+	<select id="find" parameterType="cn.com.goldfinance.jcframework.expression.ExpressionQuery" resultMap="queryResultMap">SELECT 
+		<choose>
+			<when test="columns.size&gt;0"> 
+				<foreach collection="columns" item="column" separator=",">${column}</foreach> 
+			</when>
+			<otherwise>t.`id` , t.`tag_name` , t.`wa_id` , t.`wx_tag_id` , t.`original_id` , t.`user_count` , t.`add_time`</otherwise>
+		</choose> FROM `wx_tag` t
+		<include refid="expressionBlock.where"/>  
+		<choose>
+			<when test="orderable">ORDER BY ${order}</when>
+			<otherwise>ORDER BY t.`id` desc</otherwise>
+		</choose>  
+		<if test="!isQueryAll">LIMIT #{start,jdbcType=INTEGER},#{limit,jdbcType=INTEGER}</if> 
+	</select>
+	<!-- 根据条件查询记录数 -->
+	<select id="findTotalCount" parameterType="cn.com.goldfinance.jcframework.expression.ExpressionQuery" resultType="java.lang.Integer">SELECT count(*) FROM `wx_tag` t 
+		<include refid="expressionBlock.where"/> 
+	</select>
+	<!-- 根据主键获取单条记录 -->
+	<select id="get" resultMap="queryResultMap" parameterType="cn.com.weixin.common.entity.WxTag">SELECT t.`id` , t.`tag_name` , t.`wa_id` , t.`wx_tag_id` , t.`original_id` , t.`user_count` , t.`add_time` FROM `wx_tag` t WHERE `id` = #{id,jdbcType=INTEGER} LIMIT 1</select>
+	<!-- 根据条件获取单条记录 -->
+	<select id="getByExpression" resultMap="queryResultMap" parameterType="cn.com.goldfinance.jcframework.expression.ExpressionQuery">SELECT t.`id` , t.`tag_name` , t.`wa_id` , t.`wx_tag_id` , t.`original_id` , t.`user_count` , t.`add_time` FROM `wx_tag` t
+		<include refid="expressionBlock.where"/> LIMIT 1
+	</select>
+	<!-- 保存,保存全部字段 -->
+	<insert id="save" parameterType="cn.com.weixin.common.entity.WxTag" keyProperty="id" keyColumn="id" useGeneratedKeys="true">INSERT INTO `wx_tag` ( `tag_name` , `wa_id` , `wx_tag_id` , `original_id` , `user_count` , `add_time` ) VALUES ( #{tagName,jdbcType=VARCHAR} , #{waId,jdbcType=INTEGER} , #{wxTagId,jdbcType=INTEGER} , #{originalId,jdbcType=VARCHAR} , #{userCount,jdbcType=INTEGER} , #{addTime,jdbcType=TIMESTAMP} )</insert>
+	<!-- 保存,保存不为NULL的字段 -->
+	<insert id="saveNotNull" parameterType="cn.com.weixin.common.entity.WxTag" keyProperty="id" keyColumn="id" useGeneratedKeys="true">INSERT INTO `wx_tag`
+		<trim prefix="(" suffix=")" suffixOverrides=","> 
+			<if test="tagName != null">`tag_name`,</if>  
+			<if test="waId != null">`wa_id`,</if>  
+			<if test="wxTagId != null">`wx_tag_id`,</if>  
+			<if test="originalId != null">`original_id`,</if>  
+			<if test="userCount != null">`user_count`,</if>  
+			<if test="addTime != null">`add_time`,</if> 
+		</trim>  
+		<trim prefix="values (" suffix=")" suffixOverrides=","> 
+			<if test="tagName != null">#{tagName,jdbcType=VARCHAR},</if>  
+			<if test="waId != null">#{waId,jdbcType=INTEGER},</if>  
+			<if test="wxTagId != null">#{wxTagId,jdbcType=INTEGER},</if>  
+			<if test="originalId != null">#{originalId,jdbcType=VARCHAR},</if>  
+			<if test="userCount != null">#{userCount,jdbcType=INTEGER},</if>  
+			<if test="addTime != null">#{addTime,jdbcType=TIMESTAMP},</if> 
+		</trim> 
+	</insert>
+	<!-- 批量保存,保存全部字段 -->
+	<insert id="saveBatch">INSERT INTO `wx_tag` ( `tag_name` , `wa_id` , `wx_tag_id` , `original_id` , `user_count` , `add_time` ) VALUES
+		<foreach collection="values" item="sql" separator=",">${sql}</foreach> 
+	</insert>
+	<!-- 批量保存,保存指定字段 -->
+	<insert id="saveBatchWithColomns">INSERT INTO `wx_tag` ${columns} VALUES 
+		<foreach collection="values" item="sql" separator=",">${sql}</foreach> 
+	</insert>
+	<!-- 更新,更新全部字段 -->
+	<update id="update" parameterType="cn.com.weixin.common.entity.WxTag">UPDATE `wx_tag`
+		<set>`tag_name`=#{tagName,jdbcType=VARCHAR}, `wa_id`=#{waId,jdbcType=INTEGER}, `wx_tag_id`=#{wxTagId,jdbcType=INTEGER}, `original_id`=#{originalId,jdbcType=VARCHAR}, `user_count`=#{userCount,jdbcType=INTEGER}, `add_time`=#{addTime,jdbcType=TIMESTAMP},</set> WHERE `id` = #{id,jdbcType=INTEGER}
+	</update>
+	<!-- 根据指定条件更新 -->
+	<update id="updateByExpression">UPDATE `wx_tag` 
+		<set>`tag_name`=#{entity.tagName,jdbcType=VARCHAR}, `wa_id`=#{entity.waId,jdbcType=INTEGER}, `wx_tag_id`=#{entity.wxTagId,jdbcType=INTEGER}, `original_id`=#{entity.originalId,jdbcType=VARCHAR}, `user_count`=#{entity.userCount,jdbcType=INTEGER}, `add_time`=#{entity.addTime,jdbcType=TIMESTAMP},</set>  
+		<include refid="expressionBlock.updateWhere"/> 
+	</update>
+	<!-- 更新不为NULL的字段 -->
+	<update id="updateNotNull" parameterType="cn.com.weixin.common.entity.WxTag">UPDATE `wx_tag`
+		<set> 
+			<if test="tagName != null">`tag_name`=#{tagName,jdbcType=VARCHAR},</if>  
+			<if test="waId != null">`wa_id`=#{waId,jdbcType=INTEGER},</if>  
+			<if test="wxTagId != null">`wx_tag_id`=#{wxTagId,jdbcType=INTEGER},</if>  
+			<if test="originalId != null">`original_id`=#{originalId,jdbcType=VARCHAR},</if>  
+			<if test="userCount != null">`user_count`=#{userCount,jdbcType=INTEGER},</if>  
+			<if test="addTime != null">`add_time`=#{addTime,jdbcType=TIMESTAMP},</if> 
+		</set> WHERE `id` = #{id,jdbcType=INTEGER}
+	</update>
+	<!-- 根据指定条件更新不为NULL的字段 -->
+	<update id="updateNotNullByExpression">UPDATE `wx_tag` 
+		<set> 
+			<if test="entity.tagName != null">`tag_name`=#{entity.tagName,jdbcType=VARCHAR},</if>  
+			<if test="entity.waId != null">`wa_id`=#{entity.waId,jdbcType=INTEGER},</if>  
+			<if test="entity.wxTagId != null">`wx_tag_id`=#{entity.wxTagId,jdbcType=INTEGER},</if>  
+			<if test="entity.originalId != null">`original_id`=#{entity.originalId,jdbcType=VARCHAR},</if>  
+			<if test="entity.userCount != null">`user_count`=#{entity.userCount,jdbcType=INTEGER},</if>  
+			<if test="entity.addTime != null">`add_time`=#{entity.addTime,jdbcType=TIMESTAMP},</if> 
+		</set>  
+		<include refid="expressionBlock.updateWhere"/> 
+	</update>
+	<!-- 根据主键删除记录 -->
+	<delete id="del" parameterType="cn.com.weixin.common.entity.WxTag">DELETE FROM `wx_tag` WHERE `id` = #{id,jdbcType=INTEGER}</delete>
+	<!-- 根据条件删除记录 -->
+	<delete id="delByExpression" parameterType="cn.com.goldfinance.jcframework.expression.ExpressionQuery">DELETE FROM `wx_tag` 
+		<include refid="expressionBlock.where"/> 
+	</delete>
+	<!-- ======自定义SQL区域start====== -->
+	<!-- ======自定义SQL区域end====== -->
+</mapper>
