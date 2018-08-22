@@ -1,3 +1,4 @@
+/*
 package com.line.onlineweb.controller;
 
 import com.line.bean.UrlMapBean;
@@ -50,3 +51,4 @@ public class UserController extends BaseController {
     }
 
 }
+*/

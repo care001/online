@@ -1,3 +1,4 @@
+/*
 package com.line.onlineweb.system;
 
 import javax.servlet.http.HttpServletRequest;
@@ -27,12 +28,14 @@ public class PowerInterceptor implements HandlerInterceptor {
 			response.sendRedirect(getRedirectUrl(request.getContextPath(),LOGIN_URL));
 			return false;
 		}
-		/*String url = request.getRequestURI();
+		*/
+/*String url = request.getRequestURI();
 		url = url.substring(url.lastIndexOf("/")+1);
 		if(!validatePower(session, url)){
 			response.sendRedirect(getRedirectUrl(request.getContextPath(),NO_POWER));
 			return false;
-		}*/
+		}*//*
+
 		return true;
 	}
 
@@ -63,3 +66,4 @@ public class PowerInterceptor implements HandlerInterceptor {
 	}
 
 }
+*/

@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="online-web:war">
+    <output-path>$PROJECT_DIR$/online-web/target</output-path>
+    <root id="archive" name="online-web-0.0.1-SNAPSHOT.war">
+      <element id="artifact" artifact-name="online-web:war exploded" />
+    </root>
+  </artifact>
+</component>

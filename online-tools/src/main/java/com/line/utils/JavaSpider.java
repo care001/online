@@ -75,7 +75,7 @@ public class JavaSpider {
 
     //解析本地的html
     public static List<UrlMapBean> Get_Localhtml(String path, String url) {
-        List<UrlMapBean> beans = new ArrayList<>();
+        List<UrlMapBean> beans = new ArrayList<UrlMapBean>();
         File file = new File(path + MD5Tools.MD5(url)+".html");
         try{
             if(file.isFile()){
@@ -137,7 +137,7 @@ public class JavaSpider {
     }
     //main函数
     public static void main(String[] args) {
-        List<UrlMapBean> urlMapBeans = resolveUrl("http://info.sporttery.cn/roll/fb_list.php?page=2&&c=%BE%BA%B2%CA%D7%A8%BC%D2");
+        List<UrlMapBean> urlMapBeans = resolveUrl("http://www.jc258.cn/news/list/26");
         for (UrlMapBean urlMapBean : urlMapBeans){
             System.out.println(urlMapBean.getName()+":"+urlMapBean.getUrl()+":"+urlMapBean.getInfo());
         }

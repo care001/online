@@ -49,7 +49,4 @@ public abstract class MD5Tools
 
     }
 
-    public static void main(String[] args) {
-        System.out.println(MD5("http://www.sporttery.cn/football/jczj/2017/1025/264149.html"));
-    }
 }
